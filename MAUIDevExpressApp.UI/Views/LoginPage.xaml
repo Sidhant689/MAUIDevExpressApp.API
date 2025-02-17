@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIDevExpressApp.UI.Views.LoginPage"
+             Title="{Binding Title}"
+             xmlns:viewmodel="clr-namespace:MAUIDevExpressApp.UI.ViewModels">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+
+            <Label 
+                Text="Welcome!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Entry 
+                x:Name="UsernameEntry"
+                Text="{Binding Username}"
+                Placeholder="Username"
+                SemanticProperties.Hint="Enter your username"/>
+
+            <Entry 
+                x:Name="PasswordEntry"
+                Text="{Binding Password}"
+                Placeholder="Password"
+                IsPassword="True"
+                SemanticProperties.Hint="Enter your password"/>
+
+            <Label 
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+                HorizontalOptions="Center" />
+
+            <Button 
+                x:Name="LoginButton"
+                Text="Login"
+                Command="{Binding LoginCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                HorizontalOptions="Center" />
+
+            <ActivityIndicator 
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                HorizontalOptions="Center" />
+
+            <Button 
+                Text="Register"
+                Command="{Binding NavigateToRegisterCommand}"
+                
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

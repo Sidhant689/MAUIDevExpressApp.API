@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIDevExpressApp.UI.Views.RegisterPage"
+             Title="{Binding Title}"
+             xmlns:viewmodel="clr-namespace:MAUIDevExpressApp.UI.ViewModels">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+
+            <Entry 
+                Text="{Binding Username}"
+                Placeholder="Username"
+                SemanticProperties.Hint="Enter your username"/>
+
+            <Entry 
+                Text="{Binding Email}"
+                Placeholder="Email"
+                Keyboard="Email"
+                SemanticProperties.Hint="Enter your email"/>
+
+            <Entry 
+                Text="{Binding Password}"
+                Placeholder="Password"
+                IsPassword="True"
+                SemanticProperties.Hint="Enter your password"/>
+
+            <Entry 
+                Text="{Binding ConfirmPassword}"
+                Placeholder="Confirm Password"
+                IsPassword="True"
+                SemanticProperties.Hint="Confirm your password"/>
+
+            <Label 
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+                HorizontalOptions="Center" />
+
+            <Button 
+                Text="Register"
+                Command="{Binding RegisterCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                HorizontalOptions="Center" />
+
+            <ActivityIndicator 
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
