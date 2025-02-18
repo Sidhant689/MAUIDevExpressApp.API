@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIDevExpressApp.UI.Views.ProductsPage"
+             xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto,*">
+        <Button Grid.Row="0"
+                Text="Add Product"
+                Command="{Binding AddProductCommand}"
+                Margin="10"/>
+
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadProductsCommand}">
+            <CollectionView 
+                ItemsSource="{Binding Products}"
+                SelectedItem="{Binding SelectProduct}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding ProductSelectedCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedProduct}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem 
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProductsViewModel}}, 
+                                            Path=DeleteProductCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       FontAttributes="Bold"/>
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding CategoryName}"
+                                       TextColor="Gray"/>
+
+                                <Label Grid.Row="0" Grid.Column="1"
+                                       Text="{Binding Price, StringFormat='${0:N2}'}"
+                                       HorizontalOptions="End"/>
+
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding StockQuantity, StringFormat='Stock: {0}'}"
+                                       HorizontalOptions="End"
+                                       TextColor="Gray"/>
+
+                                <Label Grid.Row="2" Grid.Column="0"
+                                        Text="{Binding Description}"
+                                        TextColor="Gray"/>          
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+
+</ContentPage>

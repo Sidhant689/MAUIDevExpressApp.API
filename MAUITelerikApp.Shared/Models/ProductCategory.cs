@@ -15,7 +15,7 @@ namespace MAUIDevExpressApp.Shared.Models
         [Required]
         [StringLength(50, ErrorMessage = "Category name cannot exceed 50 characters.")]
         public string Name { get; set; }
-
+        public string Description { get; set; }
         public string Image {  get; set; }
 
         // Navigation Property: A category can have multiple products

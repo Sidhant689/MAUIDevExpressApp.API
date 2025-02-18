@@ -42,6 +42,19 @@
             ContentTemplate="{DataTemplate views:MainPage}"
             Route="MainPage" />
     </FlyoutItem>
+    <FlyoutItem Title="Product Categories">
+        <ShellContent
+            Title="Product Categories"
+            ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
+            Route="ProductCategoriesPage"/>     
+    </FlyoutItem>
+
+    <FlyoutItem Title="Products">
+        <ShellContent
+        Title="Products"
+        ContentTemplate="{DataTemplate views:ProductsPage}"
+        Route="ProductsPage" />
+    </FlyoutItem>
 
     <!-- Logout MenuItem in Flyout -->
     <Shell.FlyoutFooter>

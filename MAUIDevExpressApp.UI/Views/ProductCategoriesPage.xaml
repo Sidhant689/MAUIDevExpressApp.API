@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dx="http://schemas.devexpress.com/maui"
+             x:Class="MAUIDevExpressApp.UI.Views.ProductCategoriesPage"
+             xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Add Category Button -->
+        <Button Grid.Row="0"
+                Text="Add Category"
+                Command="{Binding AddProductCategoryCommand}"
+                Margin="10"/>
+
+        <!-- Refreshable Category List -->
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefresheing}" Command="{Binding LoadProductCategoryCommand}">
+            <CollectionView 
+                ItemsSource="{Binding ProductCategories}"
+                SelectedItem="{Binding SelectedProductCategory}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding ProductCategorySelectedCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedProductCategory}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem 
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProductsCategoryViewModel}}, 
+                                            Path=DeleteProductCategoryCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Category Name -->
+                                <Label Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       FontAttributes="Bold"/>
+
+                                <!-- Category Image (Optional) -->
+                                <Image Grid.Row="0" Grid.Column="1"
+                                       Source="{Binding Image}"
+                                       WidthRequest="40"
+                                       HeightRequest="40"
+                                       VerticalOptions="Center"/>
+
+                                <!-- Category Description -->
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding Description}"
+                                       TextColor="Gray"
+                                       LineBreakMode="TailTruncation"/>
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+
+</ContentPage>

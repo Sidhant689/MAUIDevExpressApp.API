@@ -14,5 +14,10 @@ namespace MAUIDevExpressApp.UI.ViewModels
 
         [ObservableProperty]
         private string _title;
+
+        public virtual Task OnNavigatedToAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

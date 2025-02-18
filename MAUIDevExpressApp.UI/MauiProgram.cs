@@ -36,6 +36,9 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddTransient<ProductsCategoryViewModel>();
+            builder.Services.AddTransient<ProductCategoryDetailViewModel>();
+            builder.Services.AddTransient<ProductsViewModel>();
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -45,6 +48,9 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<ProductCategoriesPage>();
+            builder.Services.AddTransient<ProductCategoryDetailPage>();
+            builder.Services.AddTransient<ProductsPage>();
 
             return builder.Build();
         }

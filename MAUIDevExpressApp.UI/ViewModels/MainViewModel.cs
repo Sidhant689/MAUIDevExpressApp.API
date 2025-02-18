@@ -25,11 +25,5 @@ namespace MAUIDevExpressApp.UI.ViewModels
             _navigationService = navigationService;
         }
 
-        [RelayCommand]
-        private async Task LogoutAsync()
-        {
-            await _authService.Logout();
-            await _navigationService.NavigateToAsync("///LoginPage");
-        }
     }
 }

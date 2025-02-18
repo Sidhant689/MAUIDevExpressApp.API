@@ -1,13 +1,14 @@
 ﻿using MAUIDevExpressApp.API.Data;
 using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MAUIDevExpressApp.API.Controllers
 {
-
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly AppDbContext _context;

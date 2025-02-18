@@ -1,4 +1,5 @@
 ﻿using MAUIDevExpressApp.UI.ViewModels;
+using MAUIDevExpressApp.UI.Views;
 
 namespace MAUIDevExpressApp.UI
 {
@@ -9,6 +10,9 @@ namespace MAUIDevExpressApp.UI
             InitializeComponent();
             BindingContext = appShellViewModel;
 
+
+            // Register routes for navigation
+            Routing.RegisterRoute("ProductCategoryDetailPage", typeof(ProductCategoryDetailPage));
         }
     }
 }

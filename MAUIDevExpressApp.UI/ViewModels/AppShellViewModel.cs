@@ -29,6 +29,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
         {
             await _authService.Logout();
             await _navigationService.NavigateToAsync("//LoginPage");
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
         }
     }
 }
