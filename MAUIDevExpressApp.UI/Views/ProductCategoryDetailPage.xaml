@@ -7,17 +7,53 @@
              Title="{Binding Title}"
              BackgroundColor="White">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <!-- Name Entry -->
-            <Frame Padding="10" CornerRadius="10" BorderColor="LightGray">
-                <VerticalStackLayout>
-                    <Label Text="Category Name" FontSize="16" FontAttributes="Bold"/>
-                    <Entry Text="{Binding Name}" Placeholder="Enter category name"/>
+    <Grid RowDefinitions="*,Auto" Padding="20">
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.RowSpan="2" 
+                         IsVisible="{Binding IsBusy}"
+                         IsRunning="{Binding IsBusy}"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"/>
+
+        <!-- Form -->
+        <VerticalStackLayout Grid.Row="0" Spacing="20">
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Name" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Category.Name}"
+                               Placeholder="Enter category name"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Description" FontAttributes="Bold"/>
+                        <Editor Text="{Binding Category.Description}"
+                                Placeholder="Enter category description"
+                                HeightRequest="100"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Image URL" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Category.Image}"
+                               Placeholder="Enter image URL"/>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-
-            
         </VerticalStackLayout>
-    </ScrollView>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="1" 
+                              Spacing="10"
+                              HorizontalOptions="Center">
+            <Button Text="Save"
+                    Command="{Binding SaveCategoryCommand}"
+                    BackgroundColor="Green"
+                    WidthRequest="150"/>
+
+            <Button Text="Cancel"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Gray"
+                    WidthRequest="150"/>
+        </HorizontalStackLayout>
+    </Grid>
 </ContentPage>

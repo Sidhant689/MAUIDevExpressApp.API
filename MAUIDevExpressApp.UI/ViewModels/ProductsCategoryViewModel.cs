@@ -16,105 +16,88 @@ namespace MAUIDevExpressApp.UI.ViewModels
     public partial class ProductsCategoryViewModel : BaseViewModel
     {
         private readonly IProductCategoryService _productCategoryService;
-        private readonly INavigationService _navigationService;
 
         [ObservableProperty]
         private ObservableCollection<ProductCategoryDTO> _productCategories;
 
-        [ObservableProperty]
-        private ProductCategoryDTO _selectedProductCategory;
-
-        [ObservableProperty]
-        private bool isRefresheing;
-
-        public ProductsCategoryViewModel(INavigationService navigationService, IProductCategoryService productCategoryService)
+        public ProductsCategoryViewModel(IProductCategoryService productCategoryService)
         {
-            _navigationService = navigationService;
+            Title = "Product Categories";
             _productCategoryService = productCategoryService;
-            Title = "Prduct Categories";
             ProductCategories = new ObservableCollection<ProductCategoryDTO>();
         }
 
         public override async Task OnNavigatedToAsync()
         {
-            await LoadProductCategoryAsync();
+            await LoadProductCategories();
         }
 
         [RelayCommand]
-        private async Task LoadProductCategoryAsync()
+        private async Task LoadProductCategories()
         {
-            if(IsBusy) return;
-
             try
             {
                 IsBusy = true;
-                var productCategoryList = await _productCategoryService.GetAllProductCategoriesAsync();
+                var categories = await _productCategoryService.GetAllProductCategoriesAsync();
                 ProductCategories.Clear();
-                foreach (var productCategory in productCategoryList)
+                foreach (var category in categories)
                 {
-                    ProductCategories.Add(productCategory);
+                    ProductCategories.Add(category);
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
+                await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
             }
             finally
             {
                 IsBusy = false;
-                IsRefresheing = false;
             }
         }
 
         [RelayCommand]
-        private async Task AddProductCategoryAsync()
+        private async Task DeleteProductCategory(int id)
         {
-            await _navigationService.NavigateToAsync("ProductCategoryDetailPage");
+            bool answer = await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete this category?", "Yes", "No");
+            if (!answer) return;
+
+            try
+            {
+                IsBusy = true;
+                await _productCategoryService.DeleteProductCategoryAsync(id);
+                var categoryToRemove = ProductCategories.FirstOrDefault(x => x.Id == id);
+                if (categoryToRemove != null)
+                {
+                    ProductCategories.Remove(categoryToRemove);
+                }
+                await Shell.Current.DisplayAlert("Success", "Product category deleted successfully", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
-        private async Task ProductCategorySelectedAsync(ProductCategoryDTO productCategory)
+        private async Task NavigateToAdd()
         {
-            if (productCategory == null) return;
+            await Shell.Current.GoToAsync(nameof(ProductCategoryDetailPage));
+        }
 
+        [RelayCommand]
+        private async Task NavigateToEdit(ProductCategoryDTO category)
+        {
             var parameters = new Dictionary<string, object>
             {
-                { "Id", productCategory.Id }
+                { "Category", category }
             };
-
-            await _navigationService.NavigateToAsync(nameof(ProductCategoryDetailPage), parameters);
-            SelectedProductCategory = null;
+            await Shell.Current.GoToAsync(nameof(ProductCategoryDetailPage), parameters);
         }
-
-
-        [RelayCommand]
-        private async Task DeleteProductCategoryAsync(ProductCategoryDTO productCategory)
-        {
-            if (productCategory == null) return;
-
-            bool answer = await Shell.Current.DisplayAlert(
-                "Delete Product Category",
-                $"Are you sure you want to delete {productCategory.Name}?",
-                "Yes", "No");
-
-            if (answer)
-            {
-                try
-                {
-                    IsBusy = true;
-                    await _productCategoryService.DeleteProductCategoryAsync(productCategory.Id);
-                    ProductCategories.Remove(productCategory);
-                }
-                catch (Exception ex)
-                {
-                    await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }
-        }
-
     }
+
 }
+

@@ -9,7 +9,7 @@ namespace MAUIDevExpressApp.UI.Views
         public ProductCategoryDetailPage(ProductCategoryDetailViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+            _viewModel = viewModel;
             BindingContext = _viewModel;
         }
 

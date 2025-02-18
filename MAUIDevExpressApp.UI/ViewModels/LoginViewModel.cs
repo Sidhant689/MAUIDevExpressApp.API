@@ -73,7 +73,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [RelayCommand]
         private async Task NavigateToRegisterAsync()
         {
-            await _navigationService.NavigateToAsync("RegisterPage");
+            await _navigationService.NavigateToAsync("///RegisterPage");
         }
     }
 }
