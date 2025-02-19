@@ -1,50 +1,43 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.Shared.DTOs;
+using MAUIDevExpressApp.Shared.Models;
 using MAUIDevExpressApp.UI.Interface_Services;
-using System;
-using System.Collections.Generic;
+using MAUIDevExpressApp.UI.Views;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.ViewModels
 {
     public partial class ProductsViewModel : BaseViewModel
     {
         private readonly IProductService _productService;
-        private readonly INavigationService _navigationService;
+        private readonly INavigationService _navigation;
 
         [ObservableProperty]
         private ObservableCollection<ProductDTO> _products;
 
-        [ObservableProperty]
-        private ProductDTO _selectedProduct;
-
-        [ObservableProperty]
-        private bool isRefresheing;
-
-        public ProductsViewModel(IProductService productService, INavigationService navigationService)
+        public ProductsViewModel(IProductService productService, INavigationService navigation)
         {
-            _productService = productService;
-            _navigationService = navigationService;
             Title = "Products";
+            _productService = productService;
+            _navigation = navigation;
             Products = new ObservableCollection<ProductDTO>();
         }
 
-        [RelayCommand]
-        private async Task LoadProductsAsync()
+        public override async Task OnNavigatedToAsync()
         {
-            if(IsBusy) return;
+            await LoadProducts();
+        }
 
+        [RelayCommand]
+        private async Task LoadProducts()
+        {
             try
             {
                 IsBusy = true;
-                var productList = await _productService.GetAllProductsAsync();
+                var products = await _productService.GetAllProductsAsync();
                 Products.Clear();
-
-                foreach (var product in productList)
+                foreach (var product in products)
                 {
                     Products.Add(product);
                 }
@@ -56,52 +49,50 @@ namespace MAUIDevExpressApp.UI.ViewModels
             finally
             {
                 IsBusy = false;
-                IsRefresheing = false;
             }
         }
 
         [RelayCommand]
-        private async Task AddProductAsync()
+        private async Task DeleteProduct(int id)
         {
-            await _navigationService.NavigateToAsync("ProductDetailPage");
-        }
+            bool answer = await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete this product?", "Yes", "No");
+            if (!answer) return;
 
-        [RelayCommand]
-        private async Task ProductSelectedAsync(ProductDTO product)
-        {
-            if (product == null) return;
-            await _navigationService.NavigateToAsync($"ProductDetailPage?id={product.Id}");
-            SelectedProduct = null;
-        }
-
-        [RelayCommand]
-        private async Task DeleteProductAsync(ProductDTO product)
-        {
-            if(product == null) return;
-
-
-            bool answer = await Shell.Current.DisplayAlert(
-                    "Delete Product",
-                    $"Are you sure you want to delete {product.Name}?",
-                    "Yes", "No");
-
-            if (answer)
+            try
             {
-                try
+                IsBusy = true;
+                await _productService.DeleteProductAsync(id);
+                var productToRemove = Products.FirstOrDefault(x => x.Id == id);
+                if (productToRemove != null)
                 {
-                    IsBusy = true;
-                    await _productService.DeleteProductAsync(product.Id);
-                    Products.Remove(product);
+                    Products.Remove(productToRemove);
                 }
-                catch (Exception ex)
-                {
-                    await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
+                await Shell.Current.DisplayAlert("Success", "Product deleted successfully", "OK");
             }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task NavigateToAdd()
+        {
+            await _navigation.NavigateToAsync(nameof(ProductDetailPage));
+        }
+
+        [RelayCommand]
+        private async Task NavigateToEdit(ProductDTO product)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "Product", product }
+            };
+            await Shell.Current.GoToAsync(nameof(ProductDetailPage), parameters);
         }
     }
 }

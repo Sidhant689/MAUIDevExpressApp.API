@@ -56,6 +56,8 @@ namespace MAUIDevExpressApp.API.Controllers
                     return BadRequest("Product data is invalid.");
                 }
 
+                product.CreatedDate = DateTime.UtcNow;
+
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
 

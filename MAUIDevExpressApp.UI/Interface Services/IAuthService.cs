@@ -12,6 +12,8 @@ namespace MAUIDevExpressApp.UI.Interface_Services
         Task<LoginResponse> Login(string username, string password);
         Task<HttpResponseMessage> Register(string username, string email, string password);
         Task Logout();
+        Task<bool> IsSessionValidAsync();
+
         bool IsAuthenticated { get; }
         string CurrentUsername { get; }
 

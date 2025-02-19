@@ -28,7 +28,30 @@ namespace MAUIDevExpressApp.UI.ViewModels
             _authService = authService;
             _navigationService = navigationService;
             Title = "Login";
+
+            // Check if session is still valid on startup
+            //Task.Run(async () => await CheckSessionAsync());
         }
+
+        public async Task CheckSessionAsync()
+        {
+            bool isSessionValid = await _authService.IsSessionValidAsync();
+            if (isSessionValid)
+            {
+                // Navigate to MainPage directly if session is valid
+                await _navigationService.NavigateToAsync("///MainPage");
+
+                var username = await SecureStorage.GetAsync("username");
+
+                if (Shell.Current.BindingContext is AppShellViewModel shellViewModel)
+                {
+                    shellViewModel.CurrentUsername = username;
+                }
+
+                Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+            }
+        }
+
 
         [RelayCommand]
         private async Task LoginAsync()

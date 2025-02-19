@@ -13,6 +13,7 @@ namespace MAUIDevExpressApp.UI
 
             // Register routes for navigation
             Routing.RegisterRoute("ProductCategoryDetailPage", typeof(ProductCategoryDetailPage));
+            Routing.RegisterRoute("ProductDetailPage", typeof(ProductDetailPage));
         }
     }
 }

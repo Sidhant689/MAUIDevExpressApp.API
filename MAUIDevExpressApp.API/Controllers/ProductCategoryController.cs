@@ -56,13 +56,15 @@ namespace MAUIDevExpressApp.API.Controllers
             if (existingCategory == null) return NotFound("Category not found");
 
             existingCategory.Name = category.Name;
+            existingCategory.Description = category.Description;
+            existingCategory.Image = category.Image;
             await _context.SaveChangesAsync();
 
             return Ok(existingCategory);
         }
 
         // Delete Category
-        [HttpGet]
+        [HttpDelete]
         [Route("api/DeleteProductCategory")]
         public async Task<IActionResult> DeleteProductCategory(int Id)
         {

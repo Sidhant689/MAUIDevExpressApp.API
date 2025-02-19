@@ -13,11 +13,14 @@ namespace MAUIDevExpressApp.UI.Views
             BindingContext = _viewModel;
         }
 
-        protected override void OnAppearing()
+        protected override void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnAppearing();
+            base.OnNavigatedTo(args);
 
-            // You can add any page initialization logic here if needed
+            if(BindingContext is ProductCategoryDetailViewModel _viewModel)
+            {
+                _viewModel.SetCategory(_viewModel.Category);
+            }
         }
     }
 }

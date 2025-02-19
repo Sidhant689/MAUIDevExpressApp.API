@@ -17,11 +17,8 @@ namespace MAUIDevExpressApp.Shared.Models
         [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters.")]
         public string Name { get; set; }
 
-        [ForeignKey("Category")]
+        [ForeignKey("ProductCategory")]
         public int CategoryId { get; set; }
-
-        // Navigation Property
-        public virtual ProductCategory ProductCategory { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")] // Precision for Price
@@ -40,5 +37,8 @@ namespace MAUIDevExpressApp.Shared.Models
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
         public string Description { get; set; }
+
+        // Navigation Property
+        public virtual ProductCategory ProductCategory { get; set; }
     }
 }

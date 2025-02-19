@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIDevExpressApp.UI.Views.ProductDetailPage"
+             xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:dx="http://schemas.devexpress.com/maui"
+             x:DataType="viewmodels:ProductDetailViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="*,Auto" Padding="20">
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.RowSpan="2" 
+                         IsVisible="{Binding IsBusy}"
+                         IsRunning="{Binding IsBusy}"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"/>
+
+        <!-- Form -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="20">
+                <Frame BorderColor="Gray" Padding="10">
+                    <VerticalStackLayout Spacing="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Name" FontAttributes="Bold"/>
+                            <Entry Text="{Binding Product.Name}"
+                                   Placeholder="Enter product name"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Category" FontAttributes="Bold"/>
+                            <Picker ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory}"
+                                    ItemDisplayBinding="{Binding Name}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Description" FontAttributes="Bold"/>
+                            <Editor Text="{Binding Product.Description}"
+                                    Placeholder="Enter product description"
+                                    HeightRequest="100"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Price" FontAttributes="Bold"/>
+                            <Entry Text="{Binding Product.Price}"
+                                   Keyboard="Numeric"
+                                   Placeholder="Enter price"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Stock Quantity" FontAttributes="Bold"/>
+                            <Entry Text="{Binding Product.StockQuantity}"
+                                   Keyboard="Numeric"
+                                   Placeholder="Enter stock quantity"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Image" FontAttributes="Bold"/>
+                            <HorizontalStackLayout>
+                                <Entry Text="{Binding Image}"
+                                   Placeholder="Image Path"
+                                   HorizontalOptions="FillAndExpand"/>
+                                <Button Text="Browse"
+                                    Command="{Binding PickImageCommand}"
+                                    WidthRequest="100"/>
+                            </HorizontalStackLayout>
+                            <!-- Image Preview -->
+                            <Image Source="{Binding Image}"
+                               HeightRequest="150"
+                               IsVisible="{Binding Image, Converter={StaticResource StringToBoolConverter}}"
+                               Aspect="AspectFit"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="1" 
+                              Spacing="10"
+                              HorizontalOptions="Center"
+                              Margin="0,10,0,0">
+            <Button Text="Save"
+                    Command="{Binding SaveProductCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    WidthRequest="150"/>
+
+            <Button Text="Cancel"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Gray"
+                    TextColor="White"
+                    WidthRequest="150"/>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

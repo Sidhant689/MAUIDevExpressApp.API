@@ -1,4 +1,5 @@
 ﻿using MAUIDevExpressApp.UI.Interface_Services;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -8,11 +9,14 @@ namespace MAUIDevExpressApp.UI.Services
     public class APIService : IAPIService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl = "http://localhost:5025/api/";
+        private readonly IConfiguration _configuration;
+        private readonly string _baseUrl;
 
-        public APIService(HttpClient httpClient)
+        public APIService(HttpClient httpClient, IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = httpClient;
+            _baseUrl = _configuration["API:BaseUrl"].ToString();
             _httpClient.BaseAddress = new Uri(_baseUrl);
         }
 

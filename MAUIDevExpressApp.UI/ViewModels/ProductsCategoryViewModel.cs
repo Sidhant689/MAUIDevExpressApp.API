@@ -16,14 +16,16 @@ namespace MAUIDevExpressApp.UI.ViewModels
     public partial class ProductsCategoryViewModel : BaseViewModel
     {
         private readonly IProductCategoryService _productCategoryService;
+        private readonly INavigationService _navigationService;
 
         [ObservableProperty]
         private ObservableCollection<ProductCategoryDTO> _productCategories;
 
-        public ProductsCategoryViewModel(IProductCategoryService productCategoryService)
+        public ProductsCategoryViewModel(IProductCategoryService productCategoryService, INavigationService navigationService)
         {
             Title = "Product Categories";
             _productCategoryService = productCategoryService;
+            _navigationService = navigationService;
             ProductCategories = new ObservableCollection<ProductCategoryDTO>();
         }
 
@@ -95,7 +97,8 @@ namespace MAUIDevExpressApp.UI.ViewModels
             {
                 { "Category", category }
             };
-            await Shell.Current.GoToAsync(nameof(ProductCategoryDetailPage), parameters);
+            //await Shell.Current.GoToAsync(nameof(ProductCategoryDetailPage), parameters);
+            await _navigationService.NavigateToAsync(nameof(ProductCategoryDetailPage), parameters);
         }
     }
 

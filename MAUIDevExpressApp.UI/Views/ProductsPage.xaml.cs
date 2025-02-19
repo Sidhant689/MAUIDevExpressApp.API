@@ -11,4 +11,10 @@ public partial class ProductsPage : ContentPage
 		_productsViewModel = productsViewModel;
 		BindingContext = _productsViewModel;
 	}
+
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        await _productsViewModel.OnNavigatedToAsync();
+    }
 }

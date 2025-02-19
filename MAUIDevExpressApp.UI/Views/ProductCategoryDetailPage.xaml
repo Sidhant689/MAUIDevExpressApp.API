@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MAUIDevExpressApp.UI.Views.ProductCategoryDetailPage"
              xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:dx="http://schemas.devexpress.com/maui"
              x:DataType="viewmodels:ProductCategoryDetailViewModel"
              Title="{Binding Title}"
              BackgroundColor="White">
-
+    
     <Grid RowDefinitions="*,Auto" Padding="20">
         <!-- Loading Indicator -->
         <ActivityIndicator Grid.RowSpan="2" 
@@ -34,8 +35,19 @@
 
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Image URL" FontAttributes="Bold"/>
-                        <Entry Text="{Binding Category.Image}"
-                               Placeholder="Enter image URL"/>
+                        <HorizontalStackLayout>
+                            <Entry Text="{Binding Image}"
+                                   Placeholder="Image Path"
+                                   HorizontalOptions="FillAndExpand"/>
+                            <Button Text="Browse"
+                                Command="{Binding PickImageCommand}"
+                                WidthRequest="100"/>
+                        </HorizontalStackLayout>
+                        <!-- Optional: Preview the selected image -->
+                        <Image Source="{Binding Image}"
+                           HeightRequest="150"
+                           IsVisible="{Binding Image, Converter={StaticResource StringToBoolConverter}}"
+                           Aspect="AspectFit"/>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>

@@ -2,8 +2,9 @@
 using MAUIDevExpressApp.UI.Services;
 using MAUIDevExpressApp.UI.ViewModels;
 using MAUIDevExpressApp.UI.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
+using System.Reflection;
 namespace MAUIDevExpressApp.UI
 {
     public static class MauiProgram
@@ -11,6 +12,19 @@ namespace MAUIDevExpressApp.UI
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            var getAssembly = Assembly.GetExecutingAssembly();
+
+            var resourceName = "MAUIDevExpressApp.UI.appsettings.json";
+            using var stream = getAssembly.GetManifestResourceStream(resourceName)
+                ?? throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
+
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+
+            builder.Configuration.AddConfiguration(config);
+
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -39,6 +53,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductsCategoryViewModel>();
             builder.Services.AddTransient<ProductCategoryDetailViewModel>();
             builder.Services.AddTransient<ProductsViewModel>();
+            builder.Services.AddTransient<ProductDetailViewModel>();
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -51,6 +66,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductCategoriesPage>();
             builder.Services.AddTransient<ProductCategoryDetailPage>();
             builder.Services.AddTransient<ProductsPage>();
+            builder.Services.AddTransient<ProductDetailPage>();
 
             return builder.Build();
         }

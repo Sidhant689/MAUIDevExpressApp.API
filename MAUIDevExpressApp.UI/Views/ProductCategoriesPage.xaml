@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:dx="http://schemas.devexpress.com/maui"
              xmlns:dto="clr-namespace:MAUIDevExpressApp.Shared.DTOs;assembly=MAUIDevExpressApp.Shared"
              x:Class="MAUIDevExpressApp.UI.Views.ProductCategoriesPage"
              xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
@@ -19,7 +18,8 @@
         <RefreshView Grid.Row="0" 
                     Command="{Binding LoadProductCategoriesCommand}"
                     IsRefreshing="{Binding IsBusy}">
-            <CollectionView ItemsSource="{Binding ProductCategories}">
+            <CollectionView ItemsSource="{Binding ProductCategories}"
+                          SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="dto:ProductCategoryDTO">
                         <Frame Margin="0,5" Padding="10">
@@ -63,7 +63,7 @@
                                             HeightRequest="35"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProductsCategoryViewModel}}, 
                                                     Path=NavigateToEditCommand}"
-                                            CommandParameter="{Binding .}"/>
+                                            CommandParameter="{Binding}"/>
 
                                     <Button Text="Delete"
                                             BackgroundColor="Red"
