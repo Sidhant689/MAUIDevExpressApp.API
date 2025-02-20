@@ -4,52 +4,76 @@
              x:Class="MAUIDevExpressApp.UI.Views.LoginPage"
              Title="{Binding Title}"
              xmlns:viewmodel="clr-namespace:MAUIDevExpressApp.UI.ViewModels">
-
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
-
             <Label 
                 Text="Welcome!"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
                 HorizontalOptions="Center" />
 
+            <!-- Username Entry -->
             <Entry 
                 x:Name="UsernameEntry"
                 Text="{Binding Username}"
                 Placeholder="Username"
-                SemanticProperties.Hint="Enter your username"/>
+                SemanticProperties.Hint="Enter your username"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
 
+            <!-- Password Entry -->
             <Entry 
                 x:Name="PasswordEntry"
                 Text="{Binding Password}"
                 Placeholder="Password"
                 IsPassword="True"
-                SemanticProperties.Hint="Enter your password"/>
+                SemanticProperties.Hint="Enter your password"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
 
+            <!-- Remember Me Option -->
+            <HorizontalStackLayout 
+                Spacing="10" 
+                HorizontalOptions="Center">
+                <CheckBox 
+                    x:Name="RememberMeCheckBox"
+                    IsChecked="{Binding RememberMe}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+                <Label 
+                    Text="Remember Me"
+                    VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <!-- Error Message -->
             <Label 
                 Text="{Binding ErrorMessage}"
                 TextColor="Red"
                 IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
                 HorizontalOptions="Center" />
 
+            <!-- Login Button -->
             <Button 
                 x:Name="LoginButton"
                 Text="Login"
                 Command="{Binding LoginCommand}"
                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center"
+                WidthRequest="200"/>
 
+            <!-- Loading Indicator -->
             <ActivityIndicator 
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
                 HorizontalOptions="Center" />
 
+            <!-- Register Button -->
             <Button 
                 Text="Register"
                 Command="{Binding NavigateToRegisterCommand}"
-                
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Primary}"
+                BorderColor="{StaticResource Primary}"
+                BorderWidth="1"
+                WidthRequest="200"/>
 
         </VerticalStackLayout>
     </ScrollView>

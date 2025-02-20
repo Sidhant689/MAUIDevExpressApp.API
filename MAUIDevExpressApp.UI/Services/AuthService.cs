@@ -9,6 +9,8 @@ namespace MAUIDevExpressApp.UI.Services
         private readonly IAPIService _apiService;
         private readonly IConfiguration _configuration;
         private LoginResponse _currentUser;
+        private System.Timers.Timer _refreshTimer;
+        private const int REFRESH_INTERVAL = 45; // minutes
 
         public bool IsAuthenticated => _currentUser != null;
         public string CurrentUsername => _currentUser?.Username;
@@ -17,14 +19,22 @@ namespace MAUIDevExpressApp.UI.Services
         {
             _apiService = apiService;
             _configuration = configuration;
+            InitializeRefreshTimer();
         }
 
-        public async Task<LoginResponse> Login(string username, string password)
+        private void InitializeRefreshTimer()
+        {
+            _refreshTimer = new System.Timers.Timer(REFRESH_INTERVAL * 60 * 1000);
+            _refreshTimer.Elapsed += async (sender, e) => await RefreshToken();
+        }
+
+        public async Task<LoginResponse> Login(string username, string password, bool rememberMe = false)
         {
             var request = new LoginRequest
             {
                 Username = username,
-                Password = password
+                Password = password,
+                RememberMe = rememberMe
             };
 
             _currentUser = await _apiService.PostAsync<LoginRequest, LoginResponse>(
@@ -34,11 +44,70 @@ namespace MAUIDevExpressApp.UI.Services
             {
                 _apiService.SetAuthToken(_currentUser.Token);
                 await SecureStorage.SetAsync("auth_token", _currentUser.Token);
+                await SecureStorage.SetAsync("refresh_token", _currentUser.RefreshToken);
                 await SecureStorage.SetAsync("username", _currentUser.Username);
-                Preferences.Set("login_timestamp", DateTime.UtcNow.ToString("o")); // Save login time
+
+                if (rememberMe)
+                {
+                    await SecureStorage.SetAsync("remember_me", "true");
+                    await SecureStorage.SetAsync("stored_username", username);
+                    await SecureStorage.SetAsync("stored_password",
+                        Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password)));
+                }
+
+                _refreshTimer.Start();
             }
 
             return _currentUser;
+        }
+
+        private async Task RefreshToken()
+        {
+            if (!IsAuthenticated) return;
+
+            try
+            {
+                var refreshRequest = new RefreshTokenRequest
+                {
+                    Token = _currentUser.Token,
+                    RefreshToken = _currentUser.RefreshToken
+                };
+
+                var response = await _apiService.PostAsync<RefreshTokenRequest, RefreshTokenResponse>(
+                    "auth/refresh", refreshRequest);
+
+                if (response?.Token != null)
+                {
+                    _currentUser.Token = response.Token;
+                    _currentUser.RefreshToken = response.RefreshToken;
+                    _apiService.SetAuthToken(response.Token);
+                    await SecureStorage.SetAsync("auth_token", response.Token);
+                    await SecureStorage.SetAsync("refresh_token", response.RefreshToken);
+                }
+            }
+            catch (Exception)
+            {
+                await Logout();
+            }
+        }
+
+        public async Task<bool> TryAutoLogin()
+        {
+            var rememberMe = await SecureStorage.GetAsync("remember_me");
+            if (rememberMe == "true")
+            {
+                var username = await SecureStorage.GetAsync("stored_username");
+                var encryptedPassword = await SecureStorage.GetAsync("stored_password");
+
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(encryptedPassword))
+                {
+                    var password = System.Text.Encoding.UTF8.GetString(
+                        Convert.FromBase64String(encryptedPassword));
+                    var response = await Login(username, password, true);
+                    return response != null;
+                }
+            }
+            return false;
         }
 
         public async Task<HttpResponseMessage> Register(string username, string email, string password)
@@ -55,43 +124,19 @@ namespace MAUIDevExpressApp.UI.Services
             return response;  // Return full response so ViewModel can handle errors
         }
 
-        public async Task<bool> IsSessionValidAsync()
-        {
-            string token = await SecureStorage.GetAsync("auth_token");
-            string loginTimeStr = Preferences.Get("login_timestamp", string.Empty);
-
-            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(loginTimeStr))
-            {
-                return false; // No session found
-            }
-
-            if (!DateTime.TryParse(loginTimeStr, out DateTime loginTime))
-            {
-                return false; // Invalid timestamp
-            }
-
-            // ✅ Safe retrieval of login time with default value
-            int totalLoginAllowed = 30; // Default to 30 minutes if not found
-            if (int.TryParse(_configuration["Login_time"], out int configLoginTime))
-            {
-                totalLoginAllowed = configLoginTime;
-            }
-
-            if ((DateTime.UtcNow - loginTime).TotalMinutes > totalLoginAllowed)
-            {
-                SecureStorage.Remove("auth_token"); // ✅ Properly clear token
-                Preferences.Remove("login_timestamp");
-                return false; // Session expired
-            }
-
-            return true; // Session is still valid
-        }
-
         public async Task Logout()
         {
             _currentUser = null;
+            _refreshTimer.Stop();
+
             SecureStorage.Remove("auth_token");
+            SecureStorage.Remove("refresh_token");
             SecureStorage.Remove("username");
+            SecureStorage.Remove("remember_me");
+            SecureStorage.Remove("stored_username");
+            SecureStorage.Remove("stored_password");
+
+            _apiService.SetAuthToken(null);
         }
 
     }

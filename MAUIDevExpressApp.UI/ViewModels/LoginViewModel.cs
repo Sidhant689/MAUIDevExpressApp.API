@@ -1,11 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.UI.Interface_Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.ViewModels
 {
@@ -23,39 +18,48 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [ObservableProperty]
         private string errorMessage;
 
+        [ObservableProperty]
+        private bool rememberMe;
+
+        [ObservableProperty]
+        private bool isLoading;
+
         public LoginViewModel(IAuthService authService, INavigationService navigationService)
         {
             _authService = authService;
             _navigationService = navigationService;
             Title = "Login";
 
-            // Check if session is still valid on startup
-            //Task.Run(async () => await CheckSessionAsync());
+            // Try auto-login when view model is created
+            InitializeAsync();
         }
 
-        public async Task CheckSessionAsync()
+        private async void InitializeAsync()
         {
-            bool isSessionValid = await _authService.IsSessionValidAsync();
-            if (isSessionValid)
+            try
             {
-                // Navigate to MainPage directly if session is valid
-                await _navigationService.NavigateToAsync("///MainPage");
-
-                var username = await SecureStorage.GetAsync("username");
-
-                if (Shell.Current.BindingContext is AppShellViewModel shellViewModel)
+                IsLoading = true;
+                // Attempt auto-login if credentials are stored
+                if (await _authService.TryAutoLogin())
                 {
-                    shellViewModel.CurrentUsername = username;
+                    await NavigateToMainPage();
                 }
-
-                Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Auto-login failed: " + ex.Message;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
-
 
         [RelayCommand]
         private async Task LoginAsync()
         {
+            if (IsBusy) return;
+
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessage = "Please enter both username and password";
@@ -65,23 +69,20 @@ namespace MAUIDevExpressApp.UI.ViewModels
             try
             {
                 IsBusy = true;
+                IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                var response = await _authService.Login(Username, Password);
+                var response = await _authService.Login(Username, Password, RememberMe);
                 if (response != null)
                 {
-                    // Navigate to main page after successful login
-                    await _navigationService.NavigateToAsync("///MainPage");
-
-                    //// Update the Shell's ViewModel with the new username
-                    if(Shell.Current.BindingContext is AppShellViewModel shellViewModel)
-                    {
-                        shellViewModel.CurrentUsername = response.Username;
-                    }
-
-                    // Enable flyout After Successful Login
-                    Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+                    // Clear sensitive data
+                    Password = string.Empty;
+                    await NavigateToMainPage();
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                ErrorMessage = "Network error: Please check your internet connection";
             }
             catch (Exception ex)
             {
@@ -90,7 +91,22 @@ namespace MAUIDevExpressApp.UI.ViewModels
             finally
             {
                 IsBusy = false;
+                IsLoading = false;
             }
+        }
+
+        private async Task NavigateToMainPage()
+        {
+            await _navigationService.NavigateToAsync("///MainPage");
+
+            // Update the Shell's ViewModel with the new username
+            if (Shell.Current?.BindingContext is AppShellViewModel shellViewModel)
+            {
+                shellViewModel.CurrentUsername = _authService.CurrentUsername;
+            }
+
+            // Enable flyout after successful login
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
         }
 
         [RelayCommand]

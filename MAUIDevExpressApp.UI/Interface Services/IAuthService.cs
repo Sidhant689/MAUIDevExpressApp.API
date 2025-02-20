@@ -9,13 +9,11 @@ namespace MAUIDevExpressApp.UI.Interface_Services
 {
     public interface IAuthService
     {
-        Task<LoginResponse> Login(string username, string password);
-        Task<HttpResponseMessage> Register(string username, string email, string password);
-        Task Logout();
-        Task<bool> IsSessionValidAsync();
-
         bool IsAuthenticated { get; }
         string CurrentUsername { get; }
-
+        Task<LoginResponse> Login(string username, string password, bool rememberMe = false);
+        Task<bool> TryAutoLogin();
+        Task Logout();
+        Task<HttpResponseMessage> Register(string username, string email, string password);
     }
 }
