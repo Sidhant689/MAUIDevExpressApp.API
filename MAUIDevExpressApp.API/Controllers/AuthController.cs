@@ -1,4 +1,5 @@
 ﻿using MAUIDevExpressApp.API.Data;
+using MAUIDevExpressApp.API.InterfaceServices;
 using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,16 +23,18 @@ namespace MAUIDevExpressApp.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IPermissionManagementService _permissionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthController"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
         /// <param name="configuration">The configuration settings.</param>
-        public AuthController(AppDbContext context, IConfiguration configuration)
+        public AuthController(AppDbContext context, IConfiguration configuration, IPermissionManagementService permissionManagementService)
         {
             _context = context;
             _configuration = configuration;
+            _permissionService = permissionManagementService;
         }
 
         /// <summary>
@@ -46,22 +49,40 @@ namespace MAUIDevExpressApp.API.Controllers
             if (user == null || !VerifyPassword(request.Password, user.PasswordHash))
                 return Unauthorized("Invalid username or password");
 
-            var (accessToken, refreshToken) = GenerateTokens(user);
+            // Get user permissions
+            var permissions = await _permissionService.GetUserPermissionsAsync(user.Id);
+            var roles = await _permissionService.GetUserRolesAsync(user.Id);
 
-            // Store refresh token
+            var (accessToken, refreshToken) = GenerateTokens(user, roles, permissions);
+
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _context.SaveChangesAsync();
-
-            var expiration = DateTime.UtcNow.AddMinutes(
-                double.Parse(_configuration["Jwt:ExpireMinutes"]));
 
             return Ok(new LoginResponse
             {
                 Token = accessToken,
                 RefreshToken = refreshToken,
                 Username = user.Username,
-                Expiration = expiration
+                Roles = roles.Select(r => new RoleDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    IsSystem = r.IsSystem,
+                    Permissions = r.RolePermissions.Select(rp => new PermissionDto
+                    {
+                        Module = rp.Permission.Module.Name,
+                        Action = rp.Permission.Action
+                    }).ToList()
+                }).ToList(),
+                Permissions = permissions.Select(p => new PermissionDto
+                {
+                    Module = p.Module.Name,
+                    Action = p.Action
+                }).ToList(),
+                Expiration = DateTime.UtcNow.AddMinutes(
+                    double.Parse(_configuration["Jwt:ExpireMinutes"] ?? "60"))
             });
         }
 
@@ -84,8 +105,12 @@ namespace MAUIDevExpressApp.API.Controllers
                 user.RefreshToken != request.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 return BadRequest("Invalid refresh token or token expired");
+            // Get user permissions
+            var permissions = await _permissionService.GetUserPermissionsAsync(user.Id);
+            var roles = await _permissionService.GetUserRolesAsync(user.Id);
 
-            var (accessToken, refreshToken) = GenerateTokens(user);
+
+            var (accessToken, refreshToken) = GenerateTokens(user,roles, permissions);
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
@@ -95,6 +120,24 @@ namespace MAUIDevExpressApp.API.Controllers
             {
                 Token = accessToken,
                 RefreshToken = refreshToken,
+                Username = user.Username,
+                Roles = roles.Select(r => new RoleDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    IsSystem = r.IsSystem,
+                    Permissions = r.RolePermissions.Select(rp => new PermissionDto
+                    {
+                        Module = rp.Permission.Module.Name,
+                        Action = rp.Permission.Action
+                    }).ToList()
+                }).ToList(),
+                Permissions = permissions.Select(p => new PermissionDto
+                {
+                    Module = p.Module.Name,
+                    Action = p.Action
+                }).ToList(),
                 Expiration = DateTime.UtcNow.AddMinutes(
                     double.Parse(_configuration["Jwt:ExpireMinutes"] ?? "60"))
             });
@@ -132,9 +175,9 @@ namespace MAUIDevExpressApp.API.Controllers
         /// </summary>
         /// <param name="user">The user for whom the tokens are generated.</param>
         /// <returns>A tuple containing the access token and refresh token.</returns>
-        private (string accessToken, string refreshToken) GenerateTokens(User user)
+        private (string accessToken, string refreshToken) GenerateTokens(User user, List<Role> roles, List<Permission> permissions)
         {
-            var accessToken = GenerateJwtToken(user);
+            var accessToken = GenerateJwtToken(user, roles, permissions);
             var refreshToken = GenerateRefreshToken();
             return (accessToken, refreshToken);
         }
@@ -156,15 +199,8 @@ namespace MAUIDevExpressApp.API.Controllers
         /// </summary>
         /// <param name="user">The user for whom the JWT is generated.</param>
         /// <returns>A JWT as a string.</returns>
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user, List<Role> roles, List<Permission> permissions)
         {
-            //var userRoles = _context.UserRoles
-            //.Include(ur => ur.Role)
-            //.ThenInclude(r => r.RolePermissions)
-            //.ThenInclude(rp => rp.Permission)
-            //.Where(ur => ur.UserId == user.Id)
-            //.ToList();
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
@@ -173,16 +209,15 @@ namespace MAUIDevExpressApp.API.Controllers
             };
 
             // Add roles
-            //foreach (var userRole in userRoles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
-
-            //    // Add permissions as claims
-            //    foreach (var permission in userRole.Role.RolePermissions)
-            //    {
-            //        claims.Add(new Claim("Permission", permission.Permission.Name));
-            //    }
-            //}
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
+            // Add permissions as claims
+            foreach (var permission in permissions)
+            {
+                claims.Add(new Claim("Permission", permission.Name));
+            }
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -199,40 +234,6 @@ namespace MAUIDevExpressApp.API.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        [HttpPost("assign-role")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AssignRoleToUser([FromBody] UserRoleRequest request)
-        {
-            var user = await _context.Users.FindAsync(request.UserId);
-            var role = await _context.Roles.FindAsync(request.RoleId);
-
-            if (user == null || role == null) return NotFound();
-
-            var userRole = new UserRole
-            {
-                UserId = request.UserId,
-                RoleId = request.RoleId
-            };
-
-            _context.UserRoles.Add(userRole);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
-
-        [HttpDelete("remove-role")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> RemoveRoleFromUser([FromBody] UserRoleRequest request)
-        {
-            var userRole = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == request.UserId && ur.RoleId == request.RoleId);
-
-            if (userRole == null) return NotFound();
-
-            _context.UserRoles.Remove(userRole);
-            await _context.SaveChangesAsync();
-            return Ok();
         }
 
         /// <summary>

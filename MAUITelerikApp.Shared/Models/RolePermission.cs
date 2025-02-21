@@ -16,6 +16,7 @@ namespace MAUIDevExpressApp.Shared.Models
         public int RoleId { get; set; }
         [ForeignKey("Permission")]
         public int PermissionId { get; set; }
+        public DateTime AssignedAt { get; set; }
         public virtual Role Role { get; set; }
         public virtual Permission Permission { get; set; }
     }

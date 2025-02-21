@@ -2,8 +2,17 @@
 
 public class NavigationService : INavigationService
 {
+
+    private readonly IAuthService _authService;
+
+    public NavigationService(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
     public async Task NavigateToAsync(string route, Dictionary<string, object>? parameters = null)
     {
+        
         if (parameters != null)
         {
             await Shell.Current.GoToAsync(route, parameters);
@@ -12,6 +21,7 @@ public class NavigationService : INavigationService
         {
             await Shell.Current.GoToAsync(route);
         }
+
     }
 
     public async Task GoBackAsync()

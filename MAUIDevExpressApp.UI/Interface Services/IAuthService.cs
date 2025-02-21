@@ -15,5 +15,7 @@ namespace MAUIDevExpressApp.UI.Interface_Services
         Task<bool> TryAutoLogin();
         Task Logout();
         Task<HttpResponseMessage> Register(string username, string email, string password);
+        bool HasRole(string[] roleName);
+        bool HasPermission(string module, string action);
     }
 }

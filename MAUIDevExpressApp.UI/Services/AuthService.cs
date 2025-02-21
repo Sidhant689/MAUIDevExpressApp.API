@@ -1,6 +1,7 @@
 ﻿using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.UI.Interface_Services;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace MAUIDevExpressApp.UI.Services
 {
@@ -15,6 +16,10 @@ namespace MAUIDevExpressApp.UI.Services
         public bool IsAuthenticated => _currentUser != null;
         public string CurrentUsername => _currentUser?.Username;
 
+        public IEnumerable<RoleDto> CurrentUserRoles => _currentUser?.Roles ?? Enumerable.Empty<RoleDto>();
+        public IEnumerable<PermissionDto> CurrentUserPermissions =>
+            _currentUser?.Permissions ?? Enumerable.Empty<PermissionDto>();
+
         public AuthService(IAPIService apiService, IConfiguration configuration)
         {
             _apiService = apiService;
@@ -26,6 +31,17 @@ namespace MAUIDevExpressApp.UI.Services
         {
             _refreshTimer = new System.Timers.Timer(REFRESH_INTERVAL * 60 * 1000);
             _refreshTimer.Elapsed += async (sender, e) => await RefreshToken();
+        }
+
+        public bool HasPermission(string module, string action)
+        {
+            return CurrentUserPermissions.Any(p =>
+                p.Module == module && p.Action == action);
+        }
+
+        public bool HasRole(string[] roleNames)
+        {
+            return CurrentUserRoles.Any(r => roleNames.Contains(r.Name));
         }
 
         public async Task<LoginResponse> Login(string username, string password, bool rememberMe = false)
@@ -43,22 +59,32 @@ namespace MAUIDevExpressApp.UI.Services
             if (_currentUser != null)
             {
                 _apiService.SetAuthToken(_currentUser.Token);
-                await SecureStorage.SetAsync("auth_token", _currentUser.Token);
-                await SecureStorage.SetAsync("refresh_token", _currentUser.RefreshToken);
-                await SecureStorage.SetAsync("username", _currentUser.Username);
-
-                if (rememberMe)
-                {
-                    await SecureStorage.SetAsync("remember_me", "true");
-                    await SecureStorage.SetAsync("stored_username", username);
-                    await SecureStorage.SetAsync("stored_password",
-                        Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password)));
-                }
-
+                await SaveUserData(_currentUser, rememberMe, username, password);
                 _refreshTimer.Start();
             }
 
             return _currentUser;
+        }
+
+        private async Task SaveUserData(
+            LoginResponse user, bool rememberMe, string username, string password)
+        {
+            await SecureStorage.SetAsync("auth_token", user.Token);
+            await SecureStorage.SetAsync("refresh_token", user.RefreshToken);
+            await SecureStorage.SetAsync("username", user.Username);
+            await SecureStorage.SetAsync("roles",
+                JsonSerializer.Serialize(user.Roles));
+            await SecureStorage.SetAsync("permissions",
+                JsonSerializer.Serialize(user.Permissions));
+
+            if (rememberMe)
+            {
+                await SecureStorage.SetAsync("remember_me", "true");
+                await SecureStorage.SetAsync("stored_username", username);
+                await SecureStorage.SetAsync("stored_password",
+                    Convert.ToBase64String(
+                        System.Text.Encoding.UTF8.GetBytes(password)));
+            }
         }
 
         private async Task RefreshToken()

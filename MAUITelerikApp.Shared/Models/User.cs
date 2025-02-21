@@ -8,7 +8,8 @@
         public string PasswordHash { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
-        //public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 
 }

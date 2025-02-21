@@ -1,5 +1,7 @@
 using MAUIDevExpressApp.API.Data;
 using MAUIDevExpressApp.API.Filters;
+using MAUIDevExpressApp.API.InterfaceServices;
+using MAUIDevExpressApp.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -78,9 +80,12 @@ namespace MAUIDevExpressApp.API
                 c.OperationFilter<SwaggerJwtAuthenticationFilter>();
             });
 
-            // Add Authorization
-            builder.Services.AddAuthorization();
+            // Add Memory Cache
+            builder.Services.AddMemoryCache();
 
+            // Add Authorization
+            builder.Services.AddScoped<IPermissionManagementService, PermissionManagementService>();
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 

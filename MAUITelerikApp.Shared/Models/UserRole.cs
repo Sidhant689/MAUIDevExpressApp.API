@@ -14,6 +14,8 @@ namespace MAUIDevExpressApp.Shared.Models
         public int UserId { get; set; }
         [ForeignKey("Role")]
         public int RoleId { get; set; }
+        public DateTime AssignedAt { get; set; }
+        public DateTime? ExpiresAt { get; set; } // Optional expiration for temporary role assignments
         public virtual User User { get; set; }
         public virtual Role Role { get; set; }
     }

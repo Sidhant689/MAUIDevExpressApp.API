@@ -6,7 +6,7 @@
         public string RefreshToken { get; set; }
         public string Username { get; set; }
         public DateTime Expiration { get; set; }
-        public List<string> Roles { get; set; }
-        public List<string> Permissions { get; set; }
+        public List<RoleDto> Roles { get; set; }
+        public List<PermissionDto> Permissions { get; set; }
     }
 }
