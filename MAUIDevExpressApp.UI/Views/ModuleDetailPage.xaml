@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIDevExpressApp.UI.Views.ModuleDetailPage"
+             Title="{Binding Title}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Entry 
+                Placeholder="Module Name"
+                Text="{Binding Module.Name}"/>
+
+            <Entry 
+                Placeholder="Module Description"
+                Text="{Binding Module.Description}"/>
+
+            <CheckBox 
+                IsChecked="{Binding Module.IsActive}"/>
+
+            <Button Text="Save"
+                Command="{Binding SaveCommand}"
+                BackgroundColor="Green"
+                TextColor="White"/>
+
+            <Button Text="Cancel"
+                Command="{Binding CancelCommand}"
+                BackgroundColor="Gray"
+                TextColor="White"/> 
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

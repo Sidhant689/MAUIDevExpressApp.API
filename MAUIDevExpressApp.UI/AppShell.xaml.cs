@@ -1,4 +1,5 @@
-﻿using MAUIDevExpressApp.UI.ViewModels;
+﻿using MAUIDevExpressApp.Shared.Models;
+using MAUIDevExpressApp.UI.ViewModels;
 using MAUIDevExpressApp.UI.Views;
 
 namespace MAUIDevExpressApp.UI
@@ -14,6 +15,9 @@ namespace MAUIDevExpressApp.UI
             // Register routes for navigation
             Routing.RegisterRoute("ProductCategoryDetailPage", typeof(ProductCategoryDetailPage));
             Routing.RegisterRoute("ProductDetailPage", typeof(ProductDetailPage));
+            Routing.RegisterRoute("ModuleDetailPage", typeof(ModuleDetailPage));
+            Routing.RegisterRoute("RoleDetailPage", typeof(RoleDetailPage));
+            Routing.RegisterRoute("RolePermission", typeof(RolePermission));
         }
     }
 }

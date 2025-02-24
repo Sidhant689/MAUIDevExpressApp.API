@@ -39,6 +39,7 @@ namespace MAUIDevExpressApp.UI
 
             // Register Services
             builder.Services.AddSingleton<HttpClient>();
+            builder.Services.AddSingleton<IDialogService,DialogService>();
             builder.Services.AddSingleton<IAPIService, APIService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
@@ -57,8 +58,10 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductsViewModel>();
             builder.Services.AddTransient<ProductDetailViewModel>();
             builder.Services.AddTransient<ModulesViewModel>();
+            builder.Services.AddTransient<ModuleDetailViewModel>();
             builder.Services.AddTransient<RolesViewModel>();
             builder.Services.AddTransient<RoleDetailViewModel>();
+            builder.Services.AddTransient<TreeViewModel>();
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -73,9 +76,11 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductsPage>();
             builder.Services.AddTransient<ProductDetailPage>();
             builder.Services.AddTransient<ModulesPage>();
+            builder.Services.AddTransient<ModuleDetailPage>();
             builder.Services.AddTransient<RolesPage>();
             builder.Services.AddTransient<RoleDetailPage>();
             builder.Services.AddTransient<RolePermissionsPage>();
+            builder.Services.AddTransient<TreeViewPage>();
 
             return builder.Build();
         }

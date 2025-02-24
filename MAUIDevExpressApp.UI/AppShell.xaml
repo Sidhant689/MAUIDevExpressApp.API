@@ -36,11 +36,24 @@
         Route="RegisterPage" />
 
     <!-- Main pages (with flyout) -->
-    <FlyoutItem Title="Main">
+    
+    <FlyoutItem Title="DashBoard">
         <ShellContent
-            Title="Home"
+            Title="DashBoard"
             ContentTemplate="{DataTemplate views:MainPage}"
             Route="MainPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Modules">
+        <ShellContent
+        Title="Modules"
+        ContentTemplate="{DataTemplate views:ModulesPage}"
+        Route="ModulesPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Roles">
+        <ShellContent
+        Title="Roles"
+        ContentTemplate="{DataTemplate views:RolesPage}"
+        Route="RolesPage" />
     </FlyoutItem>
     <FlyoutItem Title="Product Categories">
         <ShellContent
