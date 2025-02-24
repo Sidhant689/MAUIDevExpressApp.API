@@ -61,7 +61,6 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ModuleDetailViewModel>();
             builder.Services.AddTransient<RolesViewModel>();
             builder.Services.AddTransient<RoleDetailViewModel>();
-            builder.Services.AddTransient<TreeViewModel>();
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -80,7 +79,6 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<RolesPage>();
             builder.Services.AddTransient<RoleDetailPage>();
             builder.Services.AddTransient<RolePermissionsPage>();
-            builder.Services.AddTransient<TreeViewPage>();
 
             return builder.Build();
         }
