@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             x:Class="MAUIDevExpressApp.UI.Views.MultiFormRolesPage"
+             Title="Manage Multiple Roles">
+
+    <Grid RowDefinitions="Auto,*" Padding="10">
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="New Role" 
+                    Command="{Binding CreateNewFormCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"/>
+
+            <Label Text="{Binding FormManager.FormCount, StringFormat='Active Forms: {0}'}"
+               VerticalOptions="Center"
+               FontSize="Medium"
+               Margin="10,0,0,0"
+               FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <!-- Form Tabs/Headers -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding FormManager.ActiveForms}" 
+                                       Spacing="5" Padding="0,10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeThickness="1" 
+                                    Stroke="{Binding IsMinimized, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Gray,Blue'}"
+                                    BackgroundColor="{Binding IsMinimized, Converter={StaticResource BoolToColorConverter}, ConverterParameter='LightGray,White'}"
+                                    StrokeShape="RoundRectangle 5,5,5,5" 
+                                    Padding="10,5" 
+                                    HeightRequest="40">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MultiFormRolesViewModel}}, Path=SelectFormCommand}" 
+                                                          CommandParameter="{Binding Id}"/>
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="{Binding Title}" 
+                                           VerticalOptions="Center" 
+                                           LineBreakMode="TailTruncation"
+                                           MaximumWidthRequest="150"/>
+                                    <Label Text="●" 
+                                           IsVisible="{Binding HasUnsavedChanges}"
+                                           TextColor="Red" 
+                                           VerticalOptions="Center"/>
+                                    <Button Text="×" 
+                                            WidthRequest="30" 
+                                            HeightRequest="30" 
+                                            Padding="0" 
+                                            CornerRadius="15"
+                                            BackgroundColor="Transparent"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MultiFormRolesViewModel}}, Path=CloseFormCommand}" 
+                                            CommandParameter="{Binding Id}"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <!-- Form Content Area -->
+            <Grid Grid.Row="1" IsVisible="{Binding FormManager.CurrentForm, Converter={StaticResource NotNullToBoolConverter}}">
+                <ContentView x:Name="FormContainer">
+                    <ScrollView>
+                        <VerticalStackLayout Padding="20" Spacing="20">
+                            <Entry Placeholder="Role Name"
+                                   Text="{Binding FormManager.CurrentForm.Role.Name, Mode=TwoWay}"
+                                   TextChanged="RoleName_TextChanged"/>
+                            <Editor Placeholder="Description"
+                                    Text="{Binding FormManager.CurrentForm.Role.Description, Mode=TwoWay}"
+                                    HeightRequest="100"/>
+                            <CheckBox IsChecked="{Binding FormManager.CurrentForm.Role.IsActive, Mode=TwoWay}"/>
+                            <Label Text="Is Active"/>
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand">
+                                <Button Text="Save"
+                                        Command="{Binding SaveFormCommand}"
+                                        CommandParameter="{Binding FormManager.CurrentForm.Id}"
+                                        BackgroundColor="Green"
+                                        TextColor="White"
+                                        WidthRequest="120"/>
+                                <Button Text="Minimize"
+                                        Command="{Binding MinimizeFormCommand}"
+                                        CommandParameter="{Binding FormManager.CurrentForm.Id}"
+                                        BackgroundColor="Gray"
+                                        TextColor="White"
+                                        WidthRequest="120"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </ContentView>
+
+                <ActivityIndicator IsVisible="{Binding FormManager.CurrentForm.IsBusy}"
+                                 IsRunning="{Binding FormManager.CurrentForm.IsBusy}"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- Empty state when no forms are open -->
+            <VerticalStackLayout Grid.Row="1" 
+                                 IsVisible="{Binding FormManager.CurrentForm, Converter={StaticResource NullToBoolConverter}}"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                <Label Text="No forms are currently open."
+                       FontSize="Medium"
+                       TextColor="Gray"
+                       HorizontalOptions="Center"/>
+                <Button Text="Create New Role"
+                        Command="{Binding CreateNewFormCommand}"
+                        Margin="0,20,0,0"
+                        HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

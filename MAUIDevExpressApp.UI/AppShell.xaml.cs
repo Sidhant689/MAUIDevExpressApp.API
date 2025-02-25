@@ -17,6 +17,7 @@ namespace MAUIDevExpressApp.UI
             Routing.RegisterRoute("ProductDetailPage", typeof(ProductDetailPage));
             Routing.RegisterRoute("ModuleDetailPage", typeof(ModuleDetailPage));
             Routing.RegisterRoute("RoleDetailPage", typeof(RoleDetailPage));
+            Routing.RegisterRoute("MultiFormRolesPage", typeof(MultiFormRolesPage));
             Routing.RegisterRoute("RolePermission", typeof(RolePermission));
         }
     }

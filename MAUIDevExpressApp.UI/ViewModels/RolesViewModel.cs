@@ -88,7 +88,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [RelayCommand]
         private async Task NavigateToAdd()
         {
-            await _navigationService.NavigateToAsync(nameof(RoleDetailPage));
+            await _navigationService.NavigateToAsync(nameof(MultiFormRolesPage));
         }
 
         [RelayCommand]

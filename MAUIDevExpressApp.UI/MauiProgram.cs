@@ -1,9 +1,11 @@
-﻿using MAUIDevExpressApp.UI.Interface_Services;
+using MAUIDevExpressApp.UI.Interface_Services;
 using MAUIDevExpressApp.UI.Services;
+using MAUIDevExpressApp.UI.Services.Multiform;
 using MAUIDevExpressApp.UI.ViewModels;
 using MAUIDevExpressApp.UI.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Core.Hosting;
 using System.Reflection;
 namespace MAUIDevExpressApp.UI
 {
@@ -31,7 +33,8 @@ namespace MAUIDevExpressApp.UI
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .ConfigureSyncfusionCore();
 
 #if DEBUG
     		builder.Logging.AddDebug();
@@ -47,6 +50,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddSingleton<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddSingleton<IModuleService, ModuleService>();
             builder.Services.AddSingleton<IRoleService, RoleService>();
+            builder.Services.AddSingleton<MultiFormManager>();
 
             // Register ViewModels
             builder.Services.AddTransient<AppShellViewModel>();
@@ -61,6 +65,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ModuleDetailViewModel>();
             builder.Services.AddTransient<RolesViewModel>();
             builder.Services.AddTransient<RoleDetailViewModel>();
+            builder.Services.AddTransient<MultiFormRolesViewModel>();
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -79,6 +84,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<RolesPage>();
             builder.Services.AddTransient<RoleDetailPage>();
             builder.Services.AddTransient<RolePermissionsPage>();
+            builder.Services.AddTransient<MultiFormRolesPage>();
 
             return builder.Build();
         }

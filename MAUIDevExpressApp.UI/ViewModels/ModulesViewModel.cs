@@ -45,7 +45,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
+                await _dialogService.ShowErrorAsync("Error", ex.Message);
             }
             finally
             {
@@ -56,7 +56,8 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [RelayCommand]
         private async Task DeleteModule(int id)
         {
-            bool answer = await _dialogService.ShowConfirmationAsync("Delete Module", "Are you sure you want to delete this module?", "Yes", "No");
+            bool answer = await _dialogService.ShowConfirmationAsync("Delete Module",
+                "Are you sure you want to delete this module?", "Yes", "No");
 
             if (answer)
             {
@@ -66,7 +67,6 @@ namespace MAUIDevExpressApp.UI.ViewModels
                     await _moduleService.DeleteModuleAsync(id);
                     var moduleToRemove = Modules.FirstOrDefault(m => m.Id == id);
                     Modules.Remove(moduleToRemove);
-                    await LoadModules();
                 }
                 catch (Exception ex)
                 {
@@ -93,6 +93,15 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 { "Module", module }
             };
             await _navigationService.NavigateToAsync(nameof(ModuleDetailPage), parameters);
+        }
+
+        [RelayCommand]
+        private async Task ItemTappedAsync(ModuleDTO module)
+        {
+            if (module != null)
+            {
+                await NavigateToEdit(module);
+            }
         }
     }
 }

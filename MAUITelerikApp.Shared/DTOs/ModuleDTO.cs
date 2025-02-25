@@ -4,6 +4,7 @@ namespace MAUIDevExpressApp.Shared.DTOs
 {
     public class ModuleDTO
     {
+        [Display(AutoGenerateField = false)]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Module name is required")]
@@ -11,10 +12,13 @@ namespace MAUIDevExpressApp.Shared.DTOs
 
         public string Description { get; set; }
         public bool IsActive { get; set; }
+        [Display(AutoGenerateField = false)]
         public DateTime CreatedAt { get; set; }
+        [Display(AutoGenerateField = false)]
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation properties
+        [Display(AutoGenerateField = false)]
         public List<PermissionDTO> Permissions { get; set; } = new();
 
         // Display properties

@@ -3,79 +3,63 @@
     x:Class="MAUIDevExpressApp.UI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+    x:DataType="vm:AppShellViewModel"
     xmlns:local="clr-namespace:MAUIDevExpressApp.UI"
     xmlns:views="clr-namespace:MAUIDevExpressApp.UI.Views"
     Shell.FlyoutBehavior="Disabled"
-    Title="MAUIDevExpressApp.UI">
-
-    <Shell.FlyoutHeader>
-        <Grid BackgroundColor="#f1f1f1" HeightRequest="100" Padding="20">
-            <VerticalStackLayout>
-                <Label
-                    Text="Welcome"
-                    FontSize="16"
-                    FontAttributes="Bold"/>
-                <Label Text="{Binding CurrentUsername}" 
-                       FontSize="20" 
-                       FontAttributes="Bold"/>
-            </VerticalStackLayout>
-        </Grid>
-    </Shell.FlyoutHeader>
-
-    <!-- Authentication pages (no flyout) -->
+    Shell.NavBarIsVisible="False"
+    Title="">
+    <!-- Custom Title View for showing username -->
+    
+    
+  
+    <!-- Authentication pages (no tabs) -->
     <ShellContent
         FlyoutItemIsVisible="False"
         Title="Login"
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
-
     <ShellContent
         FlyoutItemIsVisible="False"
         Title="Register"
         ContentTemplate="{DataTemplate views:RegisterPage}"
         Route="RegisterPage" />
 
-    <!-- Main pages (with flyout) -->
+    <!-- Main pages with TabBar (top navigation) -->
+    <TabBar >
+        <Tab Title="DashBoard" Icon="dashboard_icon">
+            <ShellContent
+                Title="DashBoard"
+                ContentTemplate="{DataTemplate views:MainPage}"
+                Route="MainPage" />
+        </Tab>
+        <Tab Title="Modules" Icon="modules_icon">
+            <ShellContent
+                Title="Modules"
+                ContentTemplate="{DataTemplate views:ModulesPage}"
+                Route="ModulesPage" />
+        </Tab>
+        <Tab Title="Roles" Icon="roles_icon">
+            <ShellContent
+                Title="Roles"
+                ContentTemplate="{DataTemplate views:RolesPage}"
+                Route="RolesPage" />
+        </Tab>
+     
+        <Tab Title="Categories" Icon="categories_icon">
+            <ShellContent
+                Title="Product Categories"
+                ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
+                Route="ProductCategoriesPage"/>
+        </Tab>
+        <Tab Title="Products" Icon="products_icon">
+            <ShellContent
+                Title="Products"
+                ContentTemplate="{DataTemplate views:ProductsPage}"
+                Route="ProductsPage" />
+        </Tab>
+       
+    </TabBar>
     
-    <FlyoutItem Title="DashBoard">
-        <ShellContent
-            Title="DashBoard"
-            ContentTemplate="{DataTemplate views:MainPage}"
-            Route="MainPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Modules">
-        <ShellContent
-        Title="Modules"
-        ContentTemplate="{DataTemplate views:ModulesPage}"
-        Route="ModulesPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Roles">
-        <ShellContent
-        Title="Roles"
-        ContentTemplate="{DataTemplate views:RolesPage}"
-        Route="RolesPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Product Categories">
-        <ShellContent
-            Title="Product Categories"
-            ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
-            Route="ProductCategoriesPage"/>     
-    </FlyoutItem>
-
-    <FlyoutItem Title="Products">
-        <ShellContent
-        Title="Products"
-        ContentTemplate="{DataTemplate views:ProductsPage}"
-        Route="ProductsPage" />
-    </FlyoutItem>
-
-    <!-- Logout MenuItem in Flyout -->
-    <Shell.FlyoutFooter>
-        <StackLayout Padding="20">
-            <Button Text="Logout" 
-                    Command="{Binding LogoutCommand}"
-                    BackgroundColor="Red"
-                    TextColor="White"/>
-        </StackLayout>
-    </Shell.FlyoutFooter>
 </Shell>

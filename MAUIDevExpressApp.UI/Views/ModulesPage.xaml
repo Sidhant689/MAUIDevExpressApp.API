@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfgrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
              xmlns:dto="clr-namespace:MAUIDevExpressApp.Shared.DTOs;assembly=MAUIDevExpressApp.Shared"
-             x:Class="MAUIDevExpressApp.UI.Views.ModulesPage"
              xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             x:Class="MAUIDevExpressApp.UI.Views.ModulesPage"
              Title="{Binding Title}">
 
     <Grid RowDefinitions="*,Auto" Padding="10">
@@ -16,50 +17,41 @@
         <RefreshView Grid.Row="0" 
                     Command="{Binding LoadModulesCommand}"
                     IsRefreshing="{Binding IsBusy}">
-            <CollectionView ItemsSource="{Binding Modules}"
-                          SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dto:ModuleDTO">
-                        <Frame Margin="0,5" Padding="10">
-                            <Grid RowSpacing="10" ColumnSpacing="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+            <sfgrid:SfDataGrid ItemsSource="{Binding Modules}"
+                              AutoGenerateColumnsMode="None"
+                              SelectionMode="Single"
+                              NavigationMode="Cell"
+                              VerticalOptions="Fill"
+                              ColumnWidthMode="Auto">
+                <sfgrid:SfDataGrid.Columns>
+                    <sfgrid:DataGridTextColumn HeaderText="Module Name" MappingName="Name"/>
+                    <sfgrid:DataGridTextColumn HeaderText="Description" MappingName="Description"/>
+                    <sfgrid:DataGridTextColumn HeaderText="Status" MappingName="StatusDisplay"/>
 
-                                <Label Grid.Row="0"
-                                       Text="{Binding Name}"
-                                       FontAttributes="Bold"/>
-
-                                <Label Grid.Row="1"
-                                       Text="{Binding Description}"
-                                       FontSize="Small"/>
-
-                                <HorizontalStackLayout Grid.Row="2" 
-                                                     Spacing="10"
-                                                     HorizontalOptions="End">
+                    <sfgrid:DataGridTemplateColumn HeaderText="Actions">
+                        <sfgrid:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="5" HorizontalOptions="Start">
                                     <Button Text="Edit"
-                                            BackgroundColor="Orange"
-                                            TextColor="White"
-                                            HeightRequest="35"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ModulesViewModel}}, 
-                                                    Path=NavigateToEditCommand}"
-                                            CommandParameter="{Binding}"/>
-
+                                BackgroundColor="Orange"
+                                TextColor="White"
+                                HeightRequest="35"
+                                WidthRequest="70"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ModulesViewModel}}, Path=NavigateToEditCommand}"
+                                CommandParameter="{Binding .}"/>
                                     <Button Text="Delete"
-                                            BackgroundColor="Red"
-                                            TextColor="White"
-                                            HeightRequest="35"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ModulesViewModel}}, 
-                                                    Path=DeleteModuleCommand}"
-                                            CommandParameter="{Binding Id}"/>
+                                BackgroundColor="Red"
+                                TextColor="White"
+                                HeightRequest="35"
+                                WidthRequest="70"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ModulesViewModel}}, Path=DeleteModuleCommand}"
+                                CommandParameter="{Binding Id}"/>
                                 </HorizontalStackLayout>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            </DataTemplate>
+                        </sfgrid:DataGridTemplateColumn.CellTemplate>
+                    </sfgrid:DataGridTemplateColumn>
+                </sfgrid:SfDataGrid.Columns>
+            </sfgrid:SfDataGrid>
         </RefreshView>
 
         <Button Grid.Row="1"
