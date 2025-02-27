@@ -17,8 +17,8 @@ namespace MAUIDevExpressApp.UI.Services
         public string CurrentUsername => _currentUser?.Username;
 
         public IEnumerable<RoleDto> CurrentUserRoles => _currentUser?.Roles ?? Enumerable.Empty<RoleDto>();
-        public IEnumerable<PermissionDto> CurrentUserPermissions =>
-            _currentUser?.Permissions ?? Enumerable.Empty<PermissionDto>();
+        public IEnumerable<PermissionDTO> CurrentUserPermissions =>
+            _currentUser?.Permissions ?? Enumerable.Empty<PermissionDTO>();
 
         public AuthService(IAPIService apiService, IConfiguration configuration)
         {

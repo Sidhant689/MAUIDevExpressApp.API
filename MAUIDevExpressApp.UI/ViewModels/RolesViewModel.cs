@@ -100,15 +100,5 @@ namespace MAUIDevExpressApp.UI.ViewModels
             };
             await _navigationService.NavigateToAsync(nameof(RoleDetailPage), parameters);
         }
-
-        [RelayCommand]
-        private async Task ManagePermissions(RoleDTO role)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                { "Role", role }
-            };
-            await _navigationService.NavigateToAsync(nameof(RolePermissionsPage), parameters);
-        }
     }
 }

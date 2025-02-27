@@ -48,16 +48,9 @@
                                 <HorizontalStackLayout Grid.Row="2" 
                                                      Spacing="10"
                                                      HorizontalOptions="End">
-                                    <Button Text="Permissions"
-                                            BackgroundColor="Blue"
-                                            TextColor="White"
-                                            HeightRequest="35"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RolesViewModel}}, 
-                                                    Path=ManagePermissionsCommand}"
-                                            CommandParameter="{Binding}"/>
-
                                     <Button Text="Edit"
                                             BackgroundColor="Orange"
+                                            ImageSource="bx_edit.png"
                                             TextColor="White"
                                             HeightRequest="35"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RolesViewModel}}, 
@@ -65,6 +58,7 @@
                                             CommandParameter="{Binding}"/>
 
                                     <Button Text="Delete"
+                                            ImageSource="trash_solid_24.png"
                                             BackgroundColor="Red"
                                             TextColor="White"
                                             HeightRequest="35"

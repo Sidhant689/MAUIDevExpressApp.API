@@ -45,7 +45,7 @@
                                            IsVisible="{Binding HasUnsavedChanges}"
                                            TextColor="Red" 
                                            VerticalOptions="Center"/>
-                                    <Button Text="×" 
+                                    <Button ImageSource="bx_x.png" 
                                             WidthRequest="30" 
                                             HeightRequest="30" 
                                             Padding="0" 

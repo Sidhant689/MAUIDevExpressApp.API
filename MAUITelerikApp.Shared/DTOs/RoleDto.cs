@@ -12,7 +12,7 @@ namespace MAUIDevExpressApp.Shared.DTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsSystem { get; set; }
-        public List<PermissionDto> Permissions { get; set; }
+        public List<PermissionDTO>? Permissions { get; set; }
     }
 
     public class CreateRoleRequest

@@ -28,32 +28,32 @@
 
     <!-- Main pages with TabBar (top navigation) -->
     <TabBar >
-        <Tab Title="DashBoard" Icon="dashboard_icon">
+        <Tab Title="DashBoard" Icon="bxs_home.png">
             <ShellContent
                 Title="DashBoard"
                 ContentTemplate="{DataTemplate views:MainPage}"
                 Route="MainPage" />
         </Tab>
-        <Tab Title="Modules" Icon="modules_icon">
+        <Tab Title="Modules" Icon="bxs_grid_alt.png">
             <ShellContent
                 Title="Modules"
                 ContentTemplate="{DataTemplate views:ModulesPage}"
                 Route="ModulesPage" />
         </Tab>
-        <Tab Title="Roles" Icon="roles_icon">
+        <Tab Title="Roles" Icon="bxs_user_check.png">
             <ShellContent
                 Title="Roles"
                 ContentTemplate="{DataTemplate views:RolesPage}"
                 Route="RolesPage" />
         </Tab>
-     
-        <Tab Title="Categories" Icon="categories_icon">
+
+        <Tab Title="Categories" Icon="bxs_category.png">
             <ShellContent
                 Title="Product Categories"
                 ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
                 Route="ProductCategoriesPage"/>
         </Tab>
-        <Tab Title="Products" Icon="products_icon">
+        <Tab Title="Products" Icon="bxs_package.png">
             <ShellContent
                 Title="Products"
                 ContentTemplate="{DataTemplate views:ProductsPage}"
