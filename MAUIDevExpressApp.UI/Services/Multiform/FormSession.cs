@@ -1,19 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MAUIDevExpressApp.Shared.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.Services.Multiform
 {
-    public partial class FormSession : ObservableObject
+    public partial class FormSession<T> : ObservableObject where T : class
     {
         public string Id { get; set; }
 
         [ObservableProperty]
-        private RoleDTO _role;
+        private T _entity;
 
         [ObservableProperty]
         private bool _isEditing;

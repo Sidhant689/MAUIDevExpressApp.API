@@ -12,6 +12,8 @@ namespace MAUIDevExpressApp.UI
 
         public App(AppShell appShell, IServiceProvider serviceProvider)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzczODA3NkAzMjM4MmUzMDJlMzBZWE0xUTg5VTFQUDN6M0prSTBXMFBzRS9ieU9NQjZHNTNGNWdpS2Y1SEhRPQ==");
+
             InitializeComponent();
 
             _serviceProvider = serviceProvider;

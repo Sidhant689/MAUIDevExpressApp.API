@@ -36,7 +36,7 @@
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MultiFormRolesViewModel}}, Path=SelectFormCommand}" 
                                                           CommandParameter="{Binding Id}"/>
                                 </Border.GestureRecognizers>
-                                <HorizontalStackLayout Spacing="10">
+                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                                     <Label Text="{Binding Title}" 
                                            VerticalOptions="Center" 
                                            LineBreakMode="TailTruncation"
@@ -46,13 +46,15 @@
                                            TextColor="Red" 
                                            VerticalOptions="Center"/>
                                     <Button ImageSource="bx_x.png" 
-                                            WidthRequest="30" 
-                                            HeightRequest="30" 
+                                            WidthRequest="10" 
+                                            HeightRequest="10" 
                                             Padding="0" 
                                             CornerRadius="15"
                                             BackgroundColor="Transparent"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MultiFormRolesViewModel}}, Path=CloseFormCommand}" 
-                                            CommandParameter="{Binding Id}"/>
+                                            CommandParameter="{Binding Id}"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"/>
                                 </HorizontalStackLayout>
                             </Border>
                         </DataTemplate>
@@ -65,13 +67,10 @@
                 <ContentView x:Name="FormContainer">
                     <ScrollView>
                         <VerticalStackLayout Padding="20" Spacing="20">
-                            <Entry Placeholder="Role Name"
-                                   Text="{Binding FormManager.CurrentForm.Role.Name, Mode=TwoWay}"
-                                   TextChanged="RoleName_TextChanged"/>
-                            <Editor Placeholder="Description"
-                                    Text="{Binding FormManager.CurrentForm.Role.Description, Mode=TwoWay}"
-                                    HeightRequest="100"/>
-                            <CheckBox IsChecked="{Binding FormManager.CurrentForm.Role.IsActive, Mode=TwoWay}"/>
+                            <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="RoleName_TextChanged" />
+                            <Editor Text="{Binding FormManager.CurrentForm.Entity.Description, Mode=TwoWay}" />
+                            <CheckBox IsChecked="{Binding FormManager.CurrentForm.Entity.IsActive, Mode=TwoWay}" />
+
                             <Label Text="Is Active"/>
                             <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand">
                                 <Button Text="Save"

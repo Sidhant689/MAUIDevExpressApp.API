@@ -17,6 +17,16 @@
             <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
             <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter"/>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
+
+            <!--App Colors-->
+                
+            <Color x:Key="PrimaryColor">#4C2C84</Color>
+            <Color x:Key="SecondaryColor">#6E40C4</Color>
+            <Color x:Key="AccentColor">#8860D0</Color>
+            <Color x:Key="SuccessColor">#2E9E5B</Color>
+            <Color x:Key="DangerColor">#D32F2F</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="BorderColor">#E0E0E0</Color>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

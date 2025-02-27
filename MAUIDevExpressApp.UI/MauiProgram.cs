@@ -50,7 +50,6 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddSingleton<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddSingleton<IModuleService, ModuleService>();
             builder.Services.AddSingleton<IRoleService, RoleService>();
-            builder.Services.AddSingleton<MultiFormManager>();
 
             // Register ViewModels
             builder.Services.AddTransient<AppShellViewModel>();

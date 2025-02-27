@@ -1,24 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.UI.Interface_Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.Services.Multiform
 {
-    public partial class MultiFormManager : ObservableObject
+    public partial class MultiFormManager<T> : ObservableObject where T : class, new()
     {
         private readonly IDialogService _dialogService;
 
         [ObservableProperty]
-        private ObservableCollection<FormSession> _activeForms;
+        private ObservableCollection<FormSession<T>> _activeForms;
 
         [ObservableProperty]
-        private FormSession _currentForm;
+        private FormSession<T> _currentForm;
 
         // Add a computed property for the count
         public int FormCount => ActiveForms?.Count ?? 0;
@@ -26,29 +23,27 @@ namespace MAUIDevExpressApp.UI.Services.Multiform
         public MultiFormManager(IDialogService dialogService)
         {
             _dialogService = dialogService;
-            ActiveForms = new ObservableCollection<FormSession>();
-
+            ActiveForms = new ObservableCollection<FormSession<T>>();
             // Add a collection changed handler to notify when the count changes
             ActiveForms.CollectionChanged += (s, e) => OnPropertyChanged(nameof(FormCount));
         }
 
-        public FormSession CreateNewSession(RoleDTO role = null, string title = null)
+        public FormSession<T> CreateNewSession(T entity = null, string title = null)
         {
             try
             {
-                var session = new FormSession
+                var session = new FormSession<T>
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Role = role ?? new RoleDTO(),
-                    IsEditing = role != null,
-                    Title = title ?? (role != null ? "Edit Role" : "New Role"),
+                    Entity = entity ?? new T(),
+                    IsEditing = entity != null,
+                    Title = title ?? (entity != null ? "Edit Item" : "New Item"),
                     IsBusy = false,
                     IsMinimized = false
                 };
 
                 ActiveForms.Add(session);
                 CurrentForm = session;
-
                 // Explicitly notify that FormCount has changed
                 OnPropertyChanged(nameof(FormCount));
                 return session;
@@ -76,7 +71,6 @@ namespace MAUIDevExpressApp.UI.Services.Multiform
                     {
                         CurrentForm = null;
                     }
-
                     // Explicitly notify that FormCount has changed
                     OnPropertyChanged(nameof(FormCount));
                 }
@@ -85,7 +79,6 @@ namespace MAUIDevExpressApp.UI.Services.Multiform
             {
                 _dialogService.ShowErrorAsync("Error", ex.Message);
             }
-            
         }
 
         public void MinimizeSession(string sessionId, bool minimize)
@@ -94,16 +87,15 @@ namespace MAUIDevExpressApp.UI.Services.Multiform
             if (session != null)
             {
                 session.IsMinimized = minimize;
-                if(minimize && CurrentForm?.Id == sessionId && ActiveForms.Count > 0)
+                if (minimize && CurrentForm?.Id == sessionId && ActiveForms.Count > 0)
                 {
-                    // sitch to anaother minimized form which is not closed
+                    // Switch to another non-minimized form
                     var nextForm = ActiveForms.FirstOrDefault(s => s.Id != sessionId && !s.IsMinimized);
                     if (nextForm != null)
                     {
                         CurrentForm = nextForm;
                     }
                 }
-             
             }
         }
     }
