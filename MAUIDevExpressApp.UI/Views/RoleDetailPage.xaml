@@ -1,85 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:cards="clr-namespace:Syncfusion.Maui.Cards;assembly=Syncfusion.Maui.Cards"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
-             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              x:Class="MAUIDevExpressApp.UI.Views.RoleDetailPage"
-             Title="{Binding Title}"
-             BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#1E1E1E}">
+             Title="{Binding Title}">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="10" Padding="10">
-            <!-- Role Details Card -->
-            <cards:SfCardView Margin="16" Padding="20" CornerRadius="8">
-                <VerticalStackLayout Spacing="20">
-                    <Label Text="Role Details" 
-                           FontSize="20" 
-                           FontAttributes="Bold"
-                           Margin="0,0,0,8"/>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Entry Placeholder="Role Name"
+                   Text="{Binding Role.Name}"/>
 
-                    <!-- Role Name Field -->
-                    <core:SfTextInputLayout Hint="Role Name" 
-                                            HelperText="Enter a descriptive name for this role" 
-                                            ContainerType="Outlined">
-                        <Entry Text="{Binding Role.Name}" />
-                    </core:SfTextInputLayout>
+            <Editor Placeholder="Description"
+                    Text="{Binding Role.Description}"
+                    HeightRequest="100"/>
 
-                    <!-- Description Field -->
-                    <core:SfTextInputLayout Hint="Description" 
-                        HelperText="Describe the purpose and permissions of this role" 
-                        ContainerType="Outlined"
-                        HorizontalOptions="FillAndExpand">
-                        <Editor Text="{Binding Role.Description}" 
-                            HeightRequest="120"/>
-                    </core:SfTextInputLayout>
+            <CheckBox IsChecked="{Binding Role.IsActive}"
+                     IsEnabled="{Binding IsEditing}"/>
+            <Label Text="Is Active"/>
 
+            <Button Text="Save"
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"/>
 
-                    <!-- Active Status -->
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                        <buttons:SfCheckBox IsChecked="{Binding Role.IsActive}" 
-                                            CheckedColor="{AppThemeBinding Light=#4CAF50, Dark=#81C784}"/>
-                        <VerticalStackLayout Grid.Column="1" Spacing="4">
-                            <Label Text="Active Status" FontAttributes="Bold"/>
-                            <Label Text="Inactive roles will not be available for assignment" 
-                                   TextColor="Gray" 
-                                   FontSize="12"/>
-                        </VerticalStackLayout>
-                    </Grid>
-
-                    <BoxView HeightRequest="1" 
-                             Color="{AppThemeBinding Light=#E0E0E0, Dark=#424242}" 
-                             Margin="0,12,0,12"/>
-
-                    <!-- Action Buttons -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
-                        <buttons:SfButton Text="Save"
-                                          Command="{Binding SaveCommand}"
-                                          BackgroundColor="{AppThemeBinding Light=#4CAF50, Dark=#81C784}"
-                                          TextColor="White"
-                                          CornerRadius="4"
-                                          FontAttributes="Bold" />
-
-                        <buttons:SfButton Grid.Column="1" 
-                                          Text="Cancel"
-                                          Command="{Binding CancelCommand}"
-                                          BackgroundColor="{AppThemeBinding Light=#9E9E9E, Dark=#757575}"
-                                          TextColor="White"
-                                          CornerRadius="4"
-                                          FontAttributes="Bold"/>
-                    </Grid>
-
-                    <!-- Loading Indicator -->
-                    <core:SfBusyIndicator IsVisible="{Binding IsBusy}"
-                                          IsRunning="{Binding IsBusy}"
-                                          AnimationType="CircularMaterial"
-                                          Title="Saving..."
-                                          BackgroundColor="#80FFFFFF"
-                                          TextColor="{AppThemeBinding Light=#2196F3, Dark=#64B5F6}"
-                                          HorizontalOptions="Center"
-                                          VerticalOptions="Center"/>
-                </VerticalStackLayout>
-            </cards:SfCardView>
+            <Button Text="Cancel"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Gray"
+                    TextColor="White"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

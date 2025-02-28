@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.Shared.DTOs;
+using MAUIDevExpressApp.Shared.Models;
 using MAUIDevExpressApp.UI.Interface_Services;
 using MAUIDevExpressApp.UI.ViewModels.GenericViewModels;
 using MAUIDevExpressApp.UI.Views;
@@ -66,6 +67,16 @@ namespace MAUIDevExpressApp.UI.ViewModels
         }
 
         [RelayCommand]
+        private async Task NavigateToEdit(PermissionDTO permission)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "Permission", permission }
+            };
+            await _navigationService.NavigateToAsync(nameof(PermissionDetailPage), parameters);
+        }
+
+        [RelayCommand]
         private async Task DeletePermission(int id)
         {
            
@@ -91,5 +102,6 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 IsBusy = false;
             }
         }
+
     }
 }

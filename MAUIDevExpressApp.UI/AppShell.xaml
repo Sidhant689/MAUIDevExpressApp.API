@@ -40,11 +40,18 @@
                 ContentTemplate="{DataTemplate views:ModulesPage}"
                 Route="ModulesPage" />
         </Tab>
-        <Tab Title="Roles" Icon="bxs_user_check.png">
+        <Tab Title="Roles" Icon="bx_user_circle.svg">
             <ShellContent
                 Title="Roles"
                 ContentTemplate="{DataTemplate views:RolesPage}"
                 Route="RolesPage" />
+        </Tab>
+
+        <Tab Title="Permissions" Icon="bxs_user_check.png">
+            <ShellContent
+                Title="Permissions"
+                ContentTemplate="{DataTemplate views:PermissionPage}"
+                Route="PermissionPage" />
         </Tab>
 
         <Tab Title="Categories" Icon="bxs_category.png">

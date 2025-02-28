@@ -99,7 +99,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
             {
                 { "Role", role }
             };
-            await _navigationService.NavigateToAsync(nameof(RoleDetailPage), parameters);
+            await _navigationService.NavigateToAsync(nameof(MultiFormRolesPage), parameters);
         }
     }
 }

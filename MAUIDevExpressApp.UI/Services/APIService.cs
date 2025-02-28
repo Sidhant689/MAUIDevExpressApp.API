@@ -22,7 +22,17 @@ namespace MAUIDevExpressApp.UI.Services
 
         public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
         {
-            return await _httpClient.PostAsJsonAsync(endpoint, data);
+            try
+            {
+                return await _httpClient.PostAsJsonAsync(endpoint, data);
+            }
+            catch (Exception ex )
+            {
+
+                await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
+                throw;
+            }
+            
         }
 
         public async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest data)

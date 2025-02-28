@@ -19,7 +19,8 @@ namespace MAUIDevExpressApp.UI.Services
 
         public async Task<List<ModuleDTO>> GetAllModulesAsync()
         {
-            return await _apiService.GetAsync<List<ModuleDTO>>("GetAllModules");
+            var data = await _apiService.GetAsync<List<ModuleDTO>>("GetAllModules");
+            return data;
         }
 
         public async Task<ModuleDTO> GetModuleByIdAsync(int id)

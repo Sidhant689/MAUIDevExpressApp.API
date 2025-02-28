@@ -67,11 +67,15 @@
                 <ContentView x:Name="FormContainer">
                     <ScrollView>
                         <VerticalStackLayout Padding="20" Spacing="20">
+                            <Label Text="Role Name" FontAttributes="Bold"/>
                             <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="RoleName_TextChanged" />
+
+                            <Label Text="Role Description" FontAttributes="Bold"/>
                             <Editor Text="{Binding FormManager.CurrentForm.Entity.Description, Mode=TwoWay}" />
+                            
+                            <Label Text="Is Active" FontAttributes="Bold"/>
                             <CheckBox IsChecked="{Binding FormManager.CurrentForm.Entity.IsActive, Mode=TwoWay}" />
 
-                            <Label Text="Is Active"/>
                             <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand">
                                 <Button Text="Save"
                                         Command="{Binding SaveFormCommand}"

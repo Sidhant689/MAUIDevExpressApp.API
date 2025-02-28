@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.UI.Interface_Services;
 using MAUIDevExpressApp.UI.ViewModels.GenericViewModels;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.ViewModels
 {
+    [QueryProperty(nameof(EntityToEdit), "Role")]
     public partial class MultiFormRolesViewModel : MultiFormBaseViewModel<RoleDTO>
     {
         private readonly IRoleService _roleService;
@@ -20,6 +22,12 @@ namespace MAUIDevExpressApp.UI.ViewModels
         {
             Title = "Roles";
             _roleService = roleService;
+        }
+
+        // Override the GetEditTitle method to provide role-specific titles
+        protected override string GetEditTitle(RoleDTO role)
+        {
+            return !string.IsNullOrWhiteSpace(role.Name) ? $"Edit {role.Name}" : "Edit Role";
         }
 
         public override void UpdateFormTitle(string formId)
@@ -37,11 +45,11 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
         }
 
-        [RelayCommand]
-        private async Task OpenExistingRole(RoleDTO role)
-        {
-            FormManager.CreateNewSession(role, $"Edit {role.Name}");
-        }
+        //[RelayCommand]
+        //private async Task OpenExistingRole(RoleDTO role)
+        //{
+        //    OpenExistingEntity(role);
+        //}
 
         protected override async Task SaveForm(string formId)
         {

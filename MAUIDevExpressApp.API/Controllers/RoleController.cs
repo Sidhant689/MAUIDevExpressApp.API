@@ -56,7 +56,7 @@ namespace MAUIDevExpressApp.API.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("api/UpdateRole")]
         public async Task<IActionResult> UpdateRole([FromBody] Role role)
         {

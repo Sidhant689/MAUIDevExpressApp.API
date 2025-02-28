@@ -20,7 +20,17 @@ namespace MAUIDevExpressApp.API.Controllers
         [Route("api/GetAllModules")]
         public async Task<List<Module>> GetAllModulesAsync()
         {
-            return await _context.Modules.Include(m => m.Permissions).ToListAsync();
+            try
+            {
+                var data = await _context.Modules.Include(m => m.Permissions).ToListAsync();    
+                return data;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         [HttpGet]

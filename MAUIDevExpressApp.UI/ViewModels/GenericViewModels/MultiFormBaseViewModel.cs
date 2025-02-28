@@ -4,6 +4,7 @@ using MAUIDevExpressApp.UI.Interface_Services;
 using MAUIDevExpressApp.UI.Services.Multiform;
 using System;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.ViewModels.GenericViewModels
@@ -16,11 +17,36 @@ namespace MAUIDevExpressApp.UI.ViewModels.GenericViewModels
         [ObservableProperty]
         private MultiFormManager<T> _formManager;
 
+        [ObservableProperty]
+        private T _entityToEdit;
+
+        partial void OnEntityToEditChanged(T value)
+        {
+            if (value != null)
+            {
+                // Create a new session with the passed entity
+                OpenExistingEntity(value);
+            }
+        }
+
         public MultiFormBaseViewModel(INavigationService navigationService, IDialogService dialogService)
         {
             _navigationService = navigationService;
             _dialogService = dialogService;
             FormManager = new MultiFormManager<T>(dialogService);
+        }
+
+        // Add this method to handle opening an existing entity
+        protected virtual void OpenExistingEntity(T entity)
+        {
+            // Default implementation, override in derived classes for custom behavior
+            FormManager.CreateNewSession(entity, GetEditTitle(entity));
+        }
+
+        // Add this method to get a title for an entity, override in derived classes
+        protected virtual string GetEditTitle(T entity)
+        {
+            return "Edit Item";
         }
 
         [RelayCommand]

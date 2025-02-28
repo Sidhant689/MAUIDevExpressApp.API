@@ -50,6 +50,7 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddSingleton<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddSingleton<IModuleService, ModuleService>();
             builder.Services.AddSingleton<IRoleService, RoleService>();
+            builder.Services.AddSingleton<IPermissionService, PermissionService>();
 
             // Register ViewModels
             builder.Services.AddTransient<AppShellViewModel>();
@@ -65,6 +66,9 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<RolesViewModel>();
             builder.Services.AddTransient<RoleDetailViewModel>();
             builder.Services.AddTransient<MultiFormRolesViewModel>();
+            builder.Services.AddTransient<PermissionViewModel>();
+            builder.Services.AddTransient<PermissionFormViewModel>();
+
 
             // Register AppShell and App
             builder.Services.AddSingleton<AppShell>();  // Add this
@@ -84,6 +88,8 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<RoleDetailPage>();
             builder.Services.AddTransient<RolePermissionsPage>();
             builder.Services.AddTransient<MultiFormRolesPage>();
+            builder.Services.AddTransient<PermissionPage>();
+            builder.Services.AddTransient<PermissionDetailPage>();
 
             return builder.Build();
         }

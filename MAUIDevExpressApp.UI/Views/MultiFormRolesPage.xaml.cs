@@ -12,6 +12,7 @@ public partial class MultiFormRolesPage : ContentPage
         BindingContext = _multiFormRolesViewModel;
     }
 
+
     private void RoleName_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (BindingContext is MultiFormRolesViewModel viewModel &&
