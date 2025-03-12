@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+
              x:Class="MAUIDevExpressApp.UI.Views.LoginPage"
              Title="{Binding Title}"
              xmlns:viewmodel="clr-namespace:MAUIDevExpressApp.UI.ViewModels">
@@ -13,33 +16,41 @@
                 HorizontalOptions="Center" />
 
             <!-- Username Entry -->
-            <Entry 
-                x:Name="UsernameEntry"
-                Text="{Binding Username}"
-                Placeholder="Username"
-                SemanticProperties.Hint="Enter your username"
-                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+            <core:SfTextInputLayout
+                Hint="Username"
+                ContainerType="Outlined">
+                <Entry 
+                    x:Name="UsernameEntry"
+                    Text="{Binding Username}"
+                    SemanticProperties.Hint="Enter your username"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+            </core:SfTextInputLayout>
+
+
+            <core:SfTextInputLayout
+                Hint="Password"
+                EnablePasswordVisibilityToggle="True"
+                ContainerType="Outlined">
+                <Entry 
+                    x:Name="PasswordEntry"
+                    Text="{Binding Password}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+
+            </core:SfTextInputLayout>
 
             <!-- Password Entry -->
-            <Entry 
-                x:Name="PasswordEntry"
-                Text="{Binding Password}"
-                Placeholder="Password"
-                IsPassword="True"
-                SemanticProperties.Hint="Enter your password"
-                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+
 
             <!-- Remember Me Option -->
             <HorizontalStackLayout 
                 Spacing="10" 
                 HorizontalOptions="Center">
-                <CheckBox 
+                <buttons:SfCheckBox 
                     x:Name="RememberMeCheckBox"
                     IsChecked="{Binding RememberMe}"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
-                <Label 
-                    Text="Remember Me"
-                    VerticalOptions="Center"/>
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                    Text="Remember Me"/>
+
             </HorizontalStackLayout>
 
             <!-- Error Message -->

@@ -1,4 +1,5 @@
 ﻿using MAUIDevExpressApp.API.Data;
+using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -33,16 +34,29 @@ namespace MAUIDevExpressApp.API.Controllers
             return Permission;
         }
 
+        // New method to get permissions by module
+        [HttpGet]
+        [Route("api/GetPermissionsByModule")]
+        public async Task<ActionResult<List<Permission>>> GetPermissionsByModule(int moduleId)
+        {
+            var permissions = await _context.Permissions
+                .Include(p => p.RolePermissions)
+                .Where(p => p.ModuleId == moduleId && p.IsActive)
+                .ToListAsync();
+
+            return permissions;
+        }
+
         [HttpPost]
         [Route("api/AddPermission")]
-        public async Task<IActionResult> AddPermission([FromBody] Permission Permission)
+        public async Task<ActionResult<Permission>> AddPermission([FromBody] Permission Permission)
         {
             try
             {
                 Permission.CreatedAt = DateTime.UtcNow;
                 _context.Permissions.Add(Permission);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetPermissionById), new { id = Permission.Id }, Permission);
+                return Permission;
             }
             catch (Exception ex)
             {
@@ -52,7 +66,7 @@ namespace MAUIDevExpressApp.API.Controllers
 
         [HttpPut]
         [Route("api/UpdatePermission")]
-        public async Task<IActionResult> UpdatePermission([FromBody] Permission Permission)
+        public async Task<ActionResult<Permission>> UpdatePermission([FromBody] Permission Permission)
         {
             try
             {
@@ -91,5 +105,6 @@ namespace MAUIDevExpressApp.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
     }
 }

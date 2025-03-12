@@ -1,4 +1,7 @@
-using MAUIDevExpressApp.UI.ViewModels;
+﻿using MAUIDevExpressApp.UI.ViewModels;
+using MAUIDevExpressApp.UI.ViewModels.Nodes;
+using Microsoft.Maui;
+using Syncfusion.Maui.Buttons;
 
 namespace MAUIDevExpressApp.UI.Views;
 
@@ -12,7 +15,6 @@ public partial class MultiFormRolesPage : ContentPage
         BindingContext = _multiFormRolesViewModel;
     }
 
-
     private void RoleName_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (BindingContext is MultiFormRolesViewModel viewModel &&
@@ -21,6 +23,19 @@ public partial class MultiFormRolesPage : ContentPage
             string formId = viewModel.FormManager.CurrentForm.Id;
             viewModel.NotifyFormChanged(formId);
             viewModel.UpdateFormTitle(formId);
+        }
+    }
+
+    private void OnPermissionCheckedChanged(object sender, Syncfusion.Maui.Buttons.StateChangedEventArgs e)
+    {
+        if (sender is SfCheckBox checkbox && checkbox.BindingContext is ModuleNodeViewModel node)
+        {
+            // Get the ViewModel
+            if (BindingContext is MultiFormRolesViewModel viewModel)
+            {
+                // Call the ViewModel method
+                viewModel.PermissionChecked(node);
+            }
         }
     }
 }

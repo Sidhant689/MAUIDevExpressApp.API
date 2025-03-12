@@ -22,7 +22,7 @@ namespace MAUIDevExpressApp.API.Controllers
         {
             try
             {
-                var data = await _context.Modules.Include(m => m.Permissions).ToListAsync();    
+                var data = await _context.Modules.ToListAsync();    
                 return data;
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace MAUIDevExpressApp.API.Controllers
         [Route("api/GetModuleById")]
         public async Task<ActionResult<Module>> GetModuleById(int id)
         {
-            var module = await _context.Modules.Include(m => m.Permissions).FirstOrDefaultAsync(m => m.Id == id);
+            var module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id);
             if (module == null) return NotFound("Module not found");
             return module;
         }

@@ -104,10 +104,11 @@ namespace MAUIDevExpressApp.UI.ViewModels
             if (Shell.Current?.BindingContext is AppShellViewModel shellViewModel)
             {
                 shellViewModel.CurrentUsername = _authService.CurrentUsername;
+                shellViewModel.IsLoggedIn = _authService.IsLoggedIn;
             }
 
             // Enable flyout after successful login
-            Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+            //Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
         }
 
         [RelayCommand]

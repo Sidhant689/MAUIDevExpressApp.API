@@ -8,12 +8,33 @@
     xmlns:local="clr-namespace:MAUIDevExpressApp.UI"
     xmlns:views="clr-namespace:MAUIDevExpressApp.UI.Views"
     Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="True"
     Title="">
-    <!-- Custom Title View for showing username -->
-    
-    
-  
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto,*,Auto" 
+           VerticalOptions="Center" 
+           Padding="10,0"
+           IsVisible="{Binding IsLoggedIn}">
+
+            <Label Grid.Column="1" 
+            Text="{Binding CurrentUsername}" 
+            VerticalOptions="Center" 
+            Margin="10,0" 
+            FontAttributes="Bold" />
+
+            <Button Grid.Column="2" 
+                        Text="Logout" 
+                        Command="{Binding LogoutCommand}" 
+                        
+                        TextColor="White" 
+                        CornerRadius="5" 
+                        Padding="10,5" />
+
+        </Grid>
+
+    </Shell.TitleView>
+
+
     <!-- Authentication pages (no tabs) -->
     <ShellContent
         FlyoutItemIsVisible="False"
@@ -27,7 +48,7 @@
         Route="RegisterPage" />
 
     <!-- Main pages with TabBar (top navigation) -->
-    <TabBar >
+    <TabBar>
         <Tab Title="DashBoard" Icon="bxs_home.png">
             <ShellContent
                 Title="DashBoard"
@@ -40,20 +61,6 @@
                 ContentTemplate="{DataTemplate views:ModulesPage}"
                 Route="ModulesPage" />
         </Tab>
-        <Tab Title="Roles" Icon="bx_user_circle.svg">
-            <ShellContent
-                Title="Roles"
-                ContentTemplate="{DataTemplate views:RolesPage}"
-                Route="RolesPage" />
-        </Tab>
-
-        <Tab Title="Permissions" Icon="bxs_user_check.png">
-            <ShellContent
-                Title="Permissions"
-                ContentTemplate="{DataTemplate views:PermissionPage}"
-                Route="PermissionPage" />
-        </Tab>
-
         <Tab Title="Categories" Icon="bxs_category.png">
             <ShellContent
                 Title="Product Categories"
@@ -66,7 +73,18 @@
                 ContentTemplate="{DataTemplate views:ProductsPage}"
                 Route="ProductsPage" />
         </Tab>
-       
+        <Tab Title="Permissions" Icon="bxs_user_check.png">
+            <ShellContent
+                Title="Permissions"
+                ContentTemplate="{DataTemplate views:PermissionPage}"
+                Route="PermissionPage" />
+        </Tab>
+        <Tab Title="Roles" Icon="bx_user_circle.svg">
+            <ShellContent
+                Title="Roles"
+                ContentTemplate="{DataTemplate views:RolesPage}"
+                Route="RolesPage" />
+        </Tab>
     </TabBar>
-    
+
 </Shell>

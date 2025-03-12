@@ -15,8 +15,9 @@ namespace MAUIDevExpressApp.UI.Services
 
         public bool IsAuthenticated => _currentUser != null;
         public string CurrentUsername => _currentUser?.Username;
+        public bool IsLoggedIn => !String.IsNullOrEmpty(_currentUser?.Username);
 
-        public IEnumerable<RoleDto> CurrentUserRoles => _currentUser?.Roles ?? Enumerable.Empty<RoleDto>();
+        public IEnumerable<RoleDTO> CurrentUserRoles => _currentUser?.Roles ?? Enumerable.Empty<RoleDTO>();
         public IEnumerable<PermissionDTO> CurrentUserPermissions =>
             _currentUser?.Permissions ?? Enumerable.Empty<PermissionDTO>();
 
@@ -166,4 +167,5 @@ namespace MAUIDevExpressApp.UI.Services
         }
 
     }
+
 }

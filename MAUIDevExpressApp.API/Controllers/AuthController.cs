@@ -64,7 +64,7 @@ namespace MAUIDevExpressApp.API.Controllers
                 Token = accessToken,
                 RefreshToken = refreshToken,
                 Username = user.Username,
-                Roles = roles.Select(r => new RoleDto
+                Roles = roles.Select(r => new RoleDTO
                 {
                     Id = r.Id,
                     Name = r.Name,
@@ -121,7 +121,7 @@ namespace MAUIDevExpressApp.API.Controllers
                 Token = accessToken,
                 RefreshToken = refreshToken,
                 Username = user.Username,
-                Roles = roles.Select(r => new RoleDto
+                Roles = roles.Select(r => new RoleDTO
                 {
                     Id = r.Id,
                     Name = r.Name,

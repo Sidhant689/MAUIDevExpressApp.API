@@ -7,5 +7,4 @@
         public int RoleId { get; set; }
         public DateTime? ExpiresAt { get; set; }
     }
-
 }

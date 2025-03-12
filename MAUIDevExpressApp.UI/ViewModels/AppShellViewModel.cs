@@ -18,19 +18,38 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [ObservableProperty]
         private string _currentUsername;
 
+        [ObservableProperty]
+        private bool _isLoggedIn;
+
         public AppShellViewModel(IAuthService authService, INavigationService navigationService)
         {
             _authService = authService;
             _navigationService = navigationService;
-            CurrentUsername = _authService.CurrentUsername;
+
+            // Initialize properties
+            UpdateUserInfo();
         }
+
+        private void UpdateUserInfo()
+        {
+            CurrentUsername = _authService.CurrentUsername;
+            IsLoggedIn = _authService.IsLoggedIn;
+        }
+
 
         [RelayCommand]
         private async Task LogoutAsync()
         {
             await _authService.Logout();
             await _navigationService.NavigateToAsync("//LoginPage");
-            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
+
+            if (Shell.Current?.BindingContext is AppShellViewModel shellViewModel)
+            {
+                shellViewModel.CurrentUsername = _authService.CurrentUsername;
+                shellViewModel.IsLoggedIn = _authService.IsLoggedIn;
+            }
+
         }
     }
+
 }

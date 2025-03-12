@@ -23,7 +23,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
         [ObservableProperty]
         private ModuleDTO _selectedModule;
 
-        public PermissionFormViewModel(IPermissionService permissionService, IModuleService moduleService, INavigationService navigationService, IDialogService dialogService) : base(navigationService,dialogService)
+        public PermissionFormViewModel(IPermissionService permissionService, IModuleService moduleService, INavigationService navigationService, IDialogService dialogService) : base(navigationService, dialogService)
         {
             _permissionService = permissionService;
             _moduleService = moduleService;
@@ -37,8 +37,8 @@ namespace MAUIDevExpressApp.UI.ViewModels
 
         public override void UpdateFormTitle(string formId)
         {
-            var form = FormManager.ActiveForms.FirstOrDefault(f=> f.Id == formId);
-            if(form != null && !string.IsNullOrEmpty(form.Entity.Name))
+            var form = FormManager.ActiveForms.FirstOrDefault(f => f.Id == formId);
+            if (form != null && !string.IsNullOrEmpty(form.Entity.Name))
             {
                 // update the title based on weather it's an edit or new form
 
@@ -47,12 +47,16 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
         }
 
-        public void LoadModules()
+        private bool _isModulesLoaded = false;
+
+        public async Task LoadModules()
         {
+            if (_isModulesLoaded) return;  // Prevent duplicate calls
+            _isModulesLoaded = true;       // Mark as loaded
+
             try
             {
-                var modulesTask = _moduleService.GetAllModulesAsync();
-                var modules = modulesTask.Result; // Wait for the task to complete and get the result
+                var modules = await _moduleService.GetAllModulesAsync();
                 Modules.Clear();
                 foreach (var category in modules)
                 {
@@ -61,21 +65,34 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
             catch (Exception ex)
             {
-                Shell.Current.DisplayAlert("Error", "Failed to load categories: " + ex.Message, "OK");
+                await Shell.Current.DisplayAlert("Error", "Failed to load categories: " + ex.Message, "OK");
             }
+        }
+
+
+        protected override async void OpenExistingEntity(PermissionDTO entity)
+        {
+            // Load modules first to ensure they're available
+            await LoadModules();
+
+            // Find and set the selected module based on the entity's ModuleId
+            SelectedModule = Modules.FirstOrDefault(m => m.Id == entity.ModuleId);
+
+            // Create a new session with the passed entity
+            FormManager.CreateNewSession(entity, GetEditTitle(entity));
         }
         protected override async Task SaveForm(string formId)
         {
-            var form = FormManager.ActiveForms.FirstOrDefault(f=> f.Id == formId);
+            var form = FormManager.ActiveForms.FirstOrDefault(f => f.Id == formId);
 
-            if(form == null) return;
+            if (form == null) return;
 
             try
             {
                 form.IsBusy = true;
                 form.HasUnsavedChanges = false;
 
-                form.Entity.ModuleId = SelectedModule.Id;   
+                form.Entity.ModuleId = SelectedModule.Id;
 
                 if (form.IsEditing)
                 {
@@ -102,4 +119,5 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
         }
     }
+
 }

@@ -19,7 +19,6 @@ namespace MAUIDevExpressApp.Shared.DTOs
 
         // Navigation properties
         [Display(AutoGenerateField = false)]
-        public List<PermissionDTO> Permissions { get; set; } = new();
 
         // Display properties
         public string StatusDisplay => IsActive ? "Active" : "Inactive";

@@ -11,8 +11,9 @@ namespace MAUIDevExpressApp.UI.Interface_Services
     {
         Task<List<PermissionDTO>> GetAllPermissionsAsync();
         Task<PermissionDTO> GetPermissionByIdAsync(int id);
-        Task CreatePermissionAsync(PermissionDTO permission);
-        Task UpdatePermissionAsync(PermissionDTO permission);
+        Task<PermissionDTO> CreatePermissionAsync(PermissionDTO permission);
+        Task<PermissionDTO> UpdatePermissionAsync(PermissionDTO permission);
         Task DeletePermissionAsync(int id);
+        Task<List<PermissionDTO>> GetPermissionsByModuleAsync(int id);
     }
 }

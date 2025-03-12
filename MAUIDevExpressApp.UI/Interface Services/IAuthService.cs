@@ -11,6 +11,7 @@ namespace MAUIDevExpressApp.UI.Interface_Services
     {
         bool IsAuthenticated { get; }
         string CurrentUsername { get; }
+        bool IsLoggedIn { get; }
         Task<LoginResponse> Login(string username, string password, bool rememberMe = false);
         Task<bool> TryAutoLogin();
         Task Logout();

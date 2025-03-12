@@ -6,8 +6,11 @@ namespace MAUIDevExpressApp.UI.Interface_Services
     {
         Task<List<RoleDTO>> GetAllRolesAsync();
         Task<RoleDTO> GetRoleByIdAsync(int id);
-        Task CreateRoleAsync(RoleDTO role);
-        Task UpdateRoleAsync(RoleDTO role);
+        Task<RoleDTO> CreateRoleAsync(RoleDTO role);
+        Task<RoleDTO> UpdateRoleAsync(RoleDTO role);
         Task DeleteRoleAsync(int id);
+        Task<bool> AddPermissionsToRoleAsync(int roleId, List<int> permissionsToAdd);
+        Task<bool> RemovePermissionsFromRoleAsync(int roleId, List<int> permissionsToRemove);
+        Task<List<RolePermissionDTO>> GetRolePermissionsAsync(int id);
     }
 }

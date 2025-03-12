@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MAUIDevExpressApp.UI.Services
@@ -19,22 +20,44 @@ namespace MAUIDevExpressApp.UI.Services
 
         public async Task<List<PermissionDTO>> GetAllPermissionsAsync()
         {
-            return await _apiService.GetAsync<List<PermissionDTO>>("GetAllPermissions");
+            var data =  await _apiService.GetAsync<List<PermissionDTO>>("GetAllPermissions");
+            return data;
+        }
+
+        public async Task<List<PermissionDTO>> GetPermissionsByModuleAsync(int moduleId)
+        {
+            var permissions = await _apiService.GetAsync<List<PermissionDTO>>($"GetPermissionsByModule?moduleId={moduleId}");
+            return permissions;
         }
 
         public async Task<PermissionDTO> GetPermissionByIdAsync(int id)
         {
-            return await _apiService.GetAsync<PermissionDTO>($"GetPermissionById?Id={id}");
+            var data =  await _apiService.GetAsync<PermissionDTO>($"GetPermissionById?Id={id}");
+            return data;
         }
 
-        public async Task CreatePermissionAsync(PermissionDTO Permission)
+        public async Task<PermissionDTO> CreatePermissionAsync(PermissionDTO Permission)
         {
-            await _apiService.PostAsync("AddPermission", Permission);
+            var response = await _apiService.PostAsync("AddPermission", Permission);
+            if(response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<PermissionDTO>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
+                return result;
+            }
+            throw new Exception($"Error creating Role : {response.RequestMessage}");
         }
 
-        public async Task UpdatePermissionAsync(PermissionDTO Permission)
+        public async Task<PermissionDTO> UpdatePermissionAsync(PermissionDTO Permission)
         {
-            await _apiService.PostAsync("UpdatePermission", Permission);
+            var response = await _apiService.PostAsync("UpdatePermission", Permission);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<PermissionDTO>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return result;
+            }
+            throw new Exception($"Error creating Role : {response.RequestMessage}");
         }
 
         public async Task DeletePermissionAsync(int id)
