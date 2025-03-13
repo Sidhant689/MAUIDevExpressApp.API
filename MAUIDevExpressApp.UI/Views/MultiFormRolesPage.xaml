@@ -77,9 +77,9 @@
 
                 <ContentView x:Name="FormContainer">
                     <ScrollView>
-                        <Grid ColumnDefinitions="300,*" RowDefinitions="Auto,*,Auto">
+                        <Grid ColumnDefinitions="Auto" RowDefinitions="Auto,*,Auto">
                             <!-- Left Side - Basic Info -->
-                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Padding="10" Spacing="20">
+                            <VerticalStackLayout  Grid.Row="0" Grid.RowSpan="2" Padding="10" Spacing="20">
                                 <!-- Role Name Input -->
                                 <core:SfTextInputLayout Hint="Role Name" 
                                                        ContainerType="Outlined" 
@@ -104,59 +104,9 @@
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
 
-                            <!-- Right Side - Permission Tree View Header -->
-                            <Grid Grid.Column="1" Grid.Row="0" Padding="10,0,10,5">
-                                <VerticalStackLayout Spacing="5">
-                                    <Label Text="Module Permissions" 
-                                           FontSize="Medium" 
-                                           FontAttributes="Bold" 
-                                           Margin="0,0,0,5"/>
-                                    <Label Text="Select the permissions to assign to this role" 
-                                           FontSize="Small" 
-                                           TextColor="Gray"/>
+                            
 
-                                    <!-- Search Box for Permissions -->
-                                    <core:SfTextInputLayout Hint="Search permissions" 
-                                                          ContainerType="Outlined"
-                                                          Margin="0,5,0,0">
-                                        <Entry Text="{Binding PermissionSearchText, Mode=TwoWay}" 
-                                              ReturnCommand="{Binding SearchPermissionsCommand}" />
-                                    </core:SfTextInputLayout>
-                                </VerticalStackLayout>
-                            </Grid>
-
-                            <!-- TreeView for Module-Permission Selection -->
-                            <Border Grid.Column="1" Grid.Row="1" 
-                                   StrokeThickness="1" 
-                                   Stroke="LightGray"
-                                   StrokeShape="RoundRectangle 5,5,5,5"
-                                   Margin="10,0,10,10">
-                                <!-- Debug Grid to verify data binding -->
-                                <treeview:SfTreeView x:Name="ModulesTreeView"
-                                     ItemsSource="{Binding ModuleNodes}"
-                                     AutoExpandMode="AllNodesExpanded"
-                                     CheckBoxMode="Recursive"
-                                     ChildPropertyName="Permissions"
-                                     ItemTemplateContextType="Node"
-                                     SelectionMode="None"
-                                     BackgroundColor="White">
-                                    <treeview:SfTreeView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Padding="5" ColumnDefinitions="Auto,*">
-                                                <buttons:SfCheckBox Grid.Column="0"
-                                                    IsChecked="{Binding Content.IsSelected, Mode=TwoWay}"
-                                                    IsThreeState="{Binding Content.IsModule}"
-                                                    VerticalOptions="Center"
-                                                    Margin="0,0,10,0"/>
-                                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                                    <Label Text="{Binding Content.Name}" 
-                                                        FontAttributes="Bold"/>
-                                                </VerticalStackLayout>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </treeview:SfTreeView.ItemTemplate>
-                                </treeview:SfTreeView>
-                            </Border>
+                           
 
                             <!-- Buttons (Spanning Both Columns) -->
                             <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"

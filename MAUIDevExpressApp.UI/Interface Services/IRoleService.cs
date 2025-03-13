@@ -11,6 +11,5 @@ namespace MAUIDevExpressApp.UI.Interface_Services
         Task DeleteRoleAsync(int id);
         Task<bool> AddPermissionsToRoleAsync(int roleId, List<int> permissionsToAdd);
         Task<bool> RemovePermissionsFromRoleAsync(int roleId, List<int> permissionsToRemove);
-        Task<List<RolePermissionDTO>> GetRolePermissionsAsync(int id);
     }
 }

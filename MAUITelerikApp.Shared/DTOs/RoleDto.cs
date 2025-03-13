@@ -18,7 +18,6 @@ namespace MAUIDevExpressApp.Shared.DTOs
 
         // Navigation properties
         public List<PermissionDTO> Permissions { get; set; } = new();
-        public List<RolePermissionDTO> RolePermissions { get; set; } = new();
         public List<UserRoleDTO> UserRoles { get; set; } = new();
 
         // Display properties

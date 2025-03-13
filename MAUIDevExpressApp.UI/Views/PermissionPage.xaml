@@ -5,11 +5,18 @@
              xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
              xmlns:dg="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
              Title="PermissionPage">
-
     <VerticalStackLayout HorizontalOptions="Center">
-        <Button 
-            Text="Add Permission"
-            Command="{Binding AddPermissionCommand}"/>
+        <HorizontalStackLayout Spacing="10" Margin="0,10,0,10">
+            <Button 
+                Text="Add Permission"
+                Command="{Binding AddPermissionCommand}"/>
+            <Button 
+                Text="Generate Report"
+                Command="{Binding GenerateReportCommand}"
+                BackgroundColor="#3498db"
+                TextColor="White"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+        </HorizontalStackLayout>
 
         <dg:SfDataGrid x:Name="dataGrid"
                        ItemsSource="{Binding PermissionsList}"
@@ -21,7 +28,6 @@
                        AllowEditing="True"
                        AllowDeleting="True"
                        SortingMode="Single">
-
             <dg:SfDataGrid.Columns>
                 <dg:DataGridTextColumn HeaderText="ID"
                                        MappingName="Id"
@@ -38,7 +44,6 @@
                 <dg:DataGridTextColumn HeaderText="Description"
                                        MappingName="Description"
                                        Width="300"/>
-
                 <!-- Edit & Delete Buttons -->
                 <dg:DataGridTemplateColumn HeaderText="Actions" Width="200">
                     <dg:DataGridTemplateColumn.CellTemplate>
@@ -59,10 +64,13 @@
                         </DataTemplate>
                     </dg:DataGridTemplateColumn.CellTemplate>
                 </dg:DataGridTemplateColumn>
-
             </dg:SfDataGrid.Columns>
-
         </dg:SfDataGrid>
-    </VerticalStackLayout>
 
+        <!-- Loading indicator -->
+        <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center"/>
+    </VerticalStackLayout>
 </ContentPage>

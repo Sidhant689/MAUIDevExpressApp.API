@@ -3,39 +3,31 @@
     x:Class="MAUIDevExpressApp.UI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
-    x:DataType="vm:AppShellViewModel"
     xmlns:local="clr-namespace:MAUIDevExpressApp.UI"
     xmlns:views="clr-namespace:MAUIDevExpressApp.UI.Views"
-    Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="True"
-    Title="">
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto,*,Auto" 
-           VerticalOptions="Center" 
-           Padding="10,0"
-           IsVisible="{Binding IsLoggedIn}">
-
-            <Label Grid.Column="1" 
-            Text="{Binding CurrentUsername}" 
-            VerticalOptions="Center" 
-            Margin="10,0" 
-            FontAttributes="Bold" />
-
-            <Button Grid.Column="2" 
-                        Text="Logout" 
-                        Command="{Binding LogoutCommand}" 
-                        
-                        TextColor="White" 
-                        CornerRadius="5" 
-                        Padding="10,5" />
-
+    xmlns:controls="clr-namespace:MAUIDevExpressApp.UI.Controls"
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutIcon="dotnet_bot.png"
+    Title="MAUIDevExpressApp.UI">
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="#f1f1f1" HeightRequest="100" Padding="20">
+            <VerticalStackLayout>
+                <Label
+                    Text="Welcome"
+                    FontSize="16"
+                    FontAttributes="Bold"/>
+                <Label Text="{Binding CurrentUsername}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"/>
+            </VerticalStackLayout>
         </Grid>
+    </Shell.FlyoutHeader>
 
-    </Shell.TitleView>
+    <Shell.FlyoutContent>
+        <controls:CustomFlyoutContent/>
+    </Shell.FlyoutContent>
 
-
-    <!-- Authentication pages (no tabs) -->
+    <!-- Authentication pages (no flyout) -->
     <ShellContent
         FlyoutItemIsVisible="False"
         Title="Login"
@@ -47,44 +39,52 @@
         ContentTemplate="{DataTemplate views:RegisterPage}"
         Route="RegisterPage" />
 
-    <!-- Main pages with TabBar (top navigation) -->
-    <TabBar>
-        <Tab Title="DashBoard" Icon="bxs_home.png">
-            <ShellContent
-                Title="DashBoard"
-                ContentTemplate="{DataTemplate views:MainPage}"
-                Route="MainPage" />
-        </Tab>
-        <Tab Title="Modules" Icon="bxs_grid_alt.png">
-            <ShellContent
-                Title="Modules"
-                ContentTemplate="{DataTemplate views:ModulesPage}"
-                Route="ModulesPage" />
-        </Tab>
-        <Tab Title="Categories" Icon="bxs_category.png">
-            <ShellContent
-                Title="Product Categories"
-                ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
-                Route="ProductCategoriesPage"/>
-        </Tab>
-        <Tab Title="Products" Icon="bxs_package.png">
-            <ShellContent
-                Title="Products"
-                ContentTemplate="{DataTemplate views:ProductsPage}"
-                Route="ProductsPage" />
-        </Tab>
-        <Tab Title="Permissions" Icon="bxs_user_check.png">
-            <ShellContent
-                Title="Permissions"
-                ContentTemplate="{DataTemplate views:PermissionPage}"
-                Route="PermissionPage" />
-        </Tab>
-        <Tab Title="Roles" Icon="bx_user_circle.svg">
-            <ShellContent
-                Title="Roles"
-                ContentTemplate="{DataTemplate views:RolesPage}"
-                Route="RolesPage" />
-        </Tab>
-    </TabBar>
+    <!-- Main pages - these will be handled by the custom flyout -->
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="DashBoard"
+        ContentTemplate="{DataTemplate views:MainPage}"
+        Route="MainPage" />
 
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Modules"
+        ContentTemplate="{DataTemplate views:ModulesPage}"
+        Route="ModulesPage" />
+
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Permissions"
+        ContentTemplate="{DataTemplate views:PermissionPage}"
+        Route="PermissionPage" />
+
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Roles"
+        ContentTemplate="{DataTemplate views:RolesPage}"
+        Route="RolesPage" />
+
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Product Categories"
+        ContentTemplate="{DataTemplate views:ProductCategoriesPage}"
+        Route="ProductCategoriesPage"/>
+
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Products"
+        ContentTemplate="{DataTemplate views:ProductsPage}"
+        Route="ProductsPage" />
+
+ 
+
+    <!-- Logout MenuItem in Flyout -->
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="20">
+            <Button Text="Logout" 
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="Red"
+                    TextColor="White"/>
+        </StackLayout>
+    </Shell.FlyoutFooter>
 </Shell>

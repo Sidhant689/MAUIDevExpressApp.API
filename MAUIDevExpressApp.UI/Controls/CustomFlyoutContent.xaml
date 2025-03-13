@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:MAUIDevExpressApp.UI.Converters"
+             x:Class="MAUIDevExpressApp.UI.Controls.CustomFlyoutContent">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:BoolToExpandImageConverter x:Key="BoolToExpandImageConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ScrollView Margin="0" Padding="0" VerticalOptions="Start">
+        <VerticalStackLayout Spacing="0" BackgroundColor="#f9f9f9">
+            <!-- Dashboard - Single item -->
+            <Grid Padding="15" BackgroundColor="Transparent" 
+              RowDefinitions="Auto"
+              ColumnDefinitions="Auto,*,Auto">
+                <Image Source="bxs_home.png" 
+                   HeightRequest="24" 
+                   WidthRequest="24" 
+                   Grid.Column="0" />
+                <Label Text="Dashboard" 
+                   FontSize="16" 
+                   VerticalOptions="Center"
+                   Grid.Column="1" 
+                   Margin="15,0,0,0" />
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                      CommandParameter="///MainPage" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- User Management - Expandable -->
+            <Grid Padding="15" BackgroundColor="Transparent" 
+              RowDefinitions="Auto"
+              ColumnDefinitions="Auto,*,Auto">
+                <Image Source="bxs_user_check.png" 
+                   HeightRequest="24" 
+                   WidthRequest="24" 
+                   Grid.Column="0" />
+                <Label Text="User Management" 
+                   FontSize="16" 
+                   VerticalOptions="Center"
+                   Grid.Column="1" 
+                   Margin="15,0,0,0" />
+                <Image Source="{Binding UserManagementExpanded, Converter={StaticResource BoolToExpandImageConverter}}" 
+                   HeightRequest="16" 
+                   WidthRequest="16" 
+                   Grid.Column="2" />
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleExpandCommand}" 
+                                      CommandParameter="UserManagement" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- User Management Submenu -->
+            <VerticalStackLayout IsVisible="{Binding UserManagementExpanded}" 
+                             Margin="40,0,0,0" 
+                             BackgroundColor="#f0f0f0"
+                             Spacing="0">
+                <Grid Padding="15" BackgroundColor="Transparent">
+                    <Label Text="Modules" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///ModulesPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid Padding="15" BackgroundColor="Transparent">
+                    <Label Text="Permissions" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///PermissionPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid Padding="15" BackgroundColor="Transparent">
+                    <Label Text="Roles" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///RolesPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Products - Expandable -->
+            <Grid Padding="15" BackgroundColor="Transparent" 
+              RowDefinitions="Auto"
+              ColumnDefinitions="Auto,*,Auto">
+                <Image Source="product.png" 
+                   HeightRequest="24" 
+                   WidthRequest="24" 
+                   Grid.Column="0" />
+                <Label Text="Products" 
+                   FontSize="16" 
+                   VerticalOptions="Center"
+                   Grid.Column="1" 
+                   Margin="15,0,0,0" />
+                <Image Source="{Binding ProductsExpanded, Converter={StaticResource BoolToExpandImageConverter}}" 
+                   HeightRequest="16" 
+                   WidthRequest="16" 
+                   Grid.Column="2" />
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleExpandCommand}" 
+                                      CommandParameter="Products" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- Products Submenu -->
+            <VerticalStackLayout IsVisible="{Binding ProductsExpanded}" 
+                             Margin="40,0,0,0" 
+                             BackgroundColor="#f0f0f0"
+                             Spacing="0">
+                <Grid Padding="15" BackgroundColor="Transparent" ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                       Source="product_categories.png" 
+                       HeightRequest="14" 
+                       WidthRequest="14" />
+                    <Label Grid.Column="1"
+                        Text="Product Categories" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///ProductCategoriesPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid Padding="15" BackgroundColor="Transparent" ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="products_list.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" 
+                        Text="Products List" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///ProductsPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Additional section for future expansion -->
+            <Grid Padding="15" BackgroundColor="Transparent" 
+              RowDefinitions="Auto"
+              ColumnDefinitions="Auto,*,Auto">
+                <Image Source="bxs_cog.png" 
+                   HeightRequest="24" 
+                   WidthRequest="24" 
+                   Grid.Column="0" />
+                <Label Text="Settings" 
+                   FontSize="16" 
+                   VerticalOptions="Center"
+                   Grid.Column="1" 
+                   Margin="15,0,0,0" />
+                <Image Source="{Binding SettingsExpanded, Converter={StaticResource BoolToExpandImageConverter}}" 
+                   HeightRequest="16" 
+                   WidthRequest="16" 
+                   Grid.Column="2" />
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleExpandCommand}" 
+                                      CommandParameter="Settings" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- Settings Submenu -->
+            <VerticalStackLayout IsVisible="{Binding SettingsExpanded}" 
+                             Margin="40,0,0,0" 
+                             BackgroundColor="#f0f0f0"
+                             Spacing="0">
+                <Grid Padding="15" BackgroundColor="Transparent">
+                    <Label Text="User Profile" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}"
+                                          CommandParameter="///UserProfilePage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid Padding="15" BackgroundColor="Transparent">
+                    <Label Text="Application Settings" 
+                       FontSize="14" 
+                       VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}"
+                                          CommandParameter="///AppSettingsPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentView>

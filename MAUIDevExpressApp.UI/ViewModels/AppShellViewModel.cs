@@ -49,6 +49,8 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 shellViewModel.IsLoggedIn = _authService.IsLoggedIn;
             }
 
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
+
         }
     }
 

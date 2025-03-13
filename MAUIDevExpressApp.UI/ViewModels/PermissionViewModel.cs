@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.Shared.Models;
 using MAUIDevExpressApp.UI.Interface_Services;
+using MAUIDevExpressApp.UI.Services.Reporting;
 using MAUIDevExpressApp.UI.ViewModels.GenericViewModels;
 using MAUIDevExpressApp.UI.Views;
 using System;
@@ -19,6 +20,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
         private readonly IPermissionService _permissionService;
         private readonly INavigationService _navigationService;
         private readonly IDialogService _dialogService;
+        private readonly PermissionReportService _permissionReportService;
 
         [ObservableProperty]
         private ObservableCollection<PermissionDTO> _permissionsList;
@@ -29,6 +31,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
             _permissionService = permissionService;
             _navigationService = navigationService;
             _dialogService = dialogService;
+            _permissionReportService = new PermissionReportService();
             PermissionsList = new ObservableCollection<PermissionDTO>();
         }
 
@@ -53,6 +56,32 @@ namespace MAUIDevExpressApp.UI.ViewModels
             catch (Exception ex)
             {
                 await _dialogService.ShowErrorAsync("Error", ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task GenerateReport()
+        {
+            try
+            {
+                IsBusy = true;
+
+                // Generate the PDF report
+                string reportFilePath = await _permissionReportService.GeneratePermissionReportAsync(PermissionsList);
+
+                // Open the PDF report with the default PDF viewer
+                await Launcher.OpenAsync(new OpenFileRequest
+                {
+                    File = new ReadOnlyFile(reportFilePath)
+                });
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.ShowErrorAsync("Report Error", $"Failed to generate or open report: {ex.Message}");
             }
             finally
             {

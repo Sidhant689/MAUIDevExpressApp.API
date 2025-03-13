@@ -25,17 +25,4 @@ public partial class MultiFormRolesPage : ContentPage
             viewModel.UpdateFormTitle(formId);
         }
     }
-
-    private void OnPermissionCheckedChanged(object sender, Syncfusion.Maui.Buttons.StateChangedEventArgs e)
-    {
-        if (sender is SfCheckBox checkbox && checkbox.BindingContext is ModuleNodeViewModel node)
-        {
-            // Get the ViewModel
-            if (BindingContext is MultiFormRolesViewModel viewModel)
-            {
-                // Call the ViewModel method
-                viewModel.PermissionChecked(node);
-            }
-        }
-    }
 }

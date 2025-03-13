@@ -56,28 +56,6 @@ namespace MAUIDevExpressApp.UI.Services
             await _apiService.DeleteAsync($"DeleteRole?Id={id}");
         }
 
-        public async Task<List<RolePermissionDTO>> GetRolePermissionsAsync(int roleId)
-        {
-            var role = await _apiService.GetAsync<RoleDTO>($"GetRoleById?id={roleId}");
-            if (role == null || role.RolePermissions == null)
-                return new List<RolePermissionDTO>();
-
-            return role.RolePermissions.Select(rp => new RolePermissionDTO
-            {
-                Id = rp.Id,
-                RoleId = rp.RoleId,
-                PermissionId = rp.PermissionId,
-                Permission = rp.Permission != null ? new PermissionDTO
-                {
-                    Id = rp.Permission.Id,
-                    Name = rp.Permission.Name,
-                    Description = rp.Permission.Description,
-                    ModuleId = rp.Permission.ModuleId,
-                    IsActive = rp.Permission.IsActive
-                } : null
-            }).ToList();
-        }
-
         public async Task<bool> AddPermissionsToRoleAsync(int roleId, List<int> permissionIds)
         {
             var request = new { RoleId = roleId, PermissionIds = permissionIds };

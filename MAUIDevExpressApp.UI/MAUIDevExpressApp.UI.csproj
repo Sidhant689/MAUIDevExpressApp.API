@@ -71,15 +71,17 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
-		<PackageReference Include="Syncfusion.Maui.Buttons" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.Cards" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.Core" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.DataGrid" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.ListView" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.PullToRefresh" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.TabView" Version="28.2.7" />
-		<PackageReference Include="Syncfusion.Maui.TreeView" Version="28.2.7" />
+		<PackageReference Include="Syncfusion.Maui.Buttons" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.Cards" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.Core" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.DataGrid" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.DataGridExport" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.ListView" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.PullToRefresh" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.TabView" Version="28.2.11" />
+		<PackageReference Include="Syncfusion.Maui.TreeView" Version="28.2.11" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,6 +89,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\CustomFlyoutContent.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

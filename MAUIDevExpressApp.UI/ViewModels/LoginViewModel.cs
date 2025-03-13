@@ -108,7 +108,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
 
             // Enable flyout after successful login
-            //Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
         }
 
         [RelayCommand]
