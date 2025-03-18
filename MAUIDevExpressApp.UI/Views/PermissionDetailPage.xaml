@@ -67,11 +67,11 @@
                     <ScrollView>
                         <VerticalStackLayout Padding="20" Spacing="20">
                             <Label Text="Permission Name" FontAttributes="Bold"/>
-                            <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="PermisaionName_textChanged" />
+                            <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="PermissionName_textChanged" />
 
-                            <Label Text="Category" FontAttributes="Bold"/>
-                            <Picker ItemsSource="{Binding Modules}"
-                                SelectedItem="{Binding SelectedModule}"
+                            <Label Text="Page" FontAttributes="Bold"/>
+                            <Picker ItemsSource="{Binding Pages}"
+                                SelectedItem="{Binding SelectedPage}"
                                 ItemDisplayBinding="{Binding Name}"/>   
 
                             <Label Text="Action" FontAttributes="Bold"/>

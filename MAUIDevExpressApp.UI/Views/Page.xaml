@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:dg="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             x:Class="MAUIDevExpressApp.UI.Views.Page"
+             Title="Page">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout
+                HorizontalOptions="Center">
+                <HorizontalStackLayout Spacing="10" Margin="0,10,0,10" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Button 
+                        Text="Add Page"
+                        Command="{Binding AddPageCommand}"
+                        BackgroundColor="#2ecc71"
+                        TextColor="White"/>
+                    <Button 
+                        Text="Generate Report"
+                        Command="{Binding GenerateReportCommand}"
+                        BackgroundColor="#3498db"
+                        TextColor="White"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+                </HorizontalStackLayout>
+                <dg:SfDataGrid x:Name="dataGrid"
+                               ItemsSource="{Binding Pages}"
+                               AutoGenerateColumnsMode="None"
+                               SelectionMode="Multiple"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="Center"
+                               AllowResizingColumns="True"
+                               AllowEditing="True"
+                               AllowDeleting="True"
+                               SortingMode="Single">
+                    <dg:SfDataGrid.Columns>
+                        <dg:DataGridTextColumn HeaderText="ID"
+                                               MappingName="Id"
+                                               Width="70"/>
+                        <dg:DataGridTextColumn HeaderText="Name"
+                                               MappingName="Name"
+                                               Width="150"/>
+                        <dg:DataGridTextColumn HeaderText="Description"
+                                               MappingName="Description"
+                                               Width="200"/>
+                        <dg:DataGridTextColumn HeaderText="Module"
+                                               MappingName="Module"
+                                               Width="120"/>
+                        <dg:DataGridTextColumn HeaderText="Status"
+                                               MappingName="StatusDisplay"
+                                               Width="100"/>
+                        <!-- Edit & Delete Buttons -->
+                        <dg:DataGridTemplateColumn HeaderText="Actions" Width="200">
+                            <dg:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Button Text="Edit" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PageViewModel}}, Path=EditPageCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="Green"
+                                                TextColor="White"
+                                                Padding="5"/>
+                                        <Button Text="Delete" 
+                                                BackgroundColor="Red"
+                                                TextColor="White"
+                                                Padding="5"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PageViewModel}}, Path=DeletePageCommand}"
+                                                CommandParameter="{Binding Id}"/>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </dg:DataGridTemplateColumn.CellTemplate>
+                        </dg:DataGridTemplateColumn>
+                    </dg:SfDataGrid.Columns>
+                </dg:SfDataGrid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Popup for Add/Edit Page using Syncfusion Components -->
+        <popup:SfPopup x:Name="sfPopUp" 
+            IsOpen="{Binding IsPopupOpen}"
+            HeaderTitle="{Binding PopupTitle}"
+            ShowHeader="True"
+            ShowCloseButton="True"
+            ShowFooter="True"
+            HeightRequest="600"
+            WidthRequest="450"
+            OverlayMode="Blur"
+                       StaysOpen="True">
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <ScrollView>
+                        <Grid 
+                        Padding="20" 
+                        RowSpacing="15" 
+                        ColumnSpacing="10"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                            <syncfusion:SfTextInputLayout 
+                            Hint="Name" 
+                            Grid.Row="0"
+                            ContainerType="Outlined"
+                            OutlineCornerRadius="10"
+                            HelperText="Enter the page name">
+                                <Entry Text="{Binding SelectedPage.Name}"/>
+                            </syncfusion:SfTextInputLayout>
+
+                            <syncfusion:SfTextInputLayout 
+                            Hint="Module" 
+                            Grid.Row="1"
+                            ContainerType="Outlined"
+                            OutlineCornerRadius="10">
+                                <inputs:SfComboBox x:Name="ddlModule" 
+                                ItemsSource="{Binding Modules}"
+                                DisplayMemberPath="Name"
+                                SelectedItem="{Binding SelectedModule}"
+                                Placeholder="Select a module"
+                                HeightRequest="40"/>
+                            </syncfusion:SfTextInputLayout>
+
+                            <syncfusion:SfTextInputLayout 
+                            Hint="Description" 
+                            Grid.Row="2"
+                            ContainerType="Outlined"
+                            OutlineCornerRadius="10"
+                            HelperText="Provide a detailed description">
+                                <Editor 
+                                Text="{Binding SelectedPage.Description}"
+                                HeightRequest="120"
+                                AutoSize="TextChanges"/>
+                            </syncfusion:SfTextInputLayout>
+
+                            <!-- Is Active Switch with Label -->
+                            <HorizontalStackLayout 
+                            Grid.Row="3" 
+                            Spacing="10">
+                                <Label 
+                                Text="Active Status:"
+                                VerticalOptions="Center"/>
+                                <buttons:SfSwitch
+                                IsOn="{Binding SelectedPage.IsActive}"
+                                HorizontalOptions="Start"/>
+                            </HorizontalStackLayout>
+
+                            <!-- Created/Updated Info - Read Only -->
+                            <VerticalStackLayout 
+                            Grid.Row="4" 
+                            Spacing="5"
+                            IsVisible="{Binding IsEditMode}">
+                                <Label 
+                                Text="{Binding StringFormat='Created: {0}', Path=SelectedPage.CreatedAtDisplay}"
+                                TextColor="#777"
+                                FontSize="Small"/>
+                                <Label 
+                                Text="{Binding StringFormat='Last Updated: {0}', Path=SelectedPage.UpdatedAtDisplay}"
+                                TextColor="#777"
+                                FontSize="Small"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </ScrollView>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+            <popup:SfPopup.FooterTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                            <Button Text="Cancel" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PageViewModel}}, Path=ClosePopupCommand}"
+                                    BackgroundColor="#95a5a6"
+                                    TextColor="White"
+                                    Padding="10,5"/>
+                            <Button Text="Save" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PageViewModel}}, Path=SavePageCommand}"
+                                    BackgroundColor="#2ecc71"
+                                    TextColor="White"
+                                    Padding="10,5"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.FooterTemplate>
+        </popup:SfPopup>
+
+        <!-- Loading Indicator -->
+        <Grid IsVisible="{Binding IsBusy}" 
+              BackgroundColor="#80000000">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Color="White"/>
+        </Grid>
+    </Grid>
+</ContentPage>

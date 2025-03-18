@@ -103,9 +103,32 @@ namespace MAUIDevExpressApp.API.Controllers
         }
 
         // New methods for permission management
+
         [HttpGet]
         [Route("api/GetRolePermissions")]
-        public async Task<ActionResult<List<RolePermission>>> GetRolePermissions(int roleId)
+        public async Task<ActionResult<List<RolePermission>>> GetRolePermissions()
+        {
+            var rolePermissions = await _context.RolePermissions
+                .Include(rp => rp.Permission)
+                .ToListAsync();
+
+            return rolePermissions;
+        }
+
+        [HttpGet]
+        [Route("api/GetRolePermissionById")]
+        public async Task<ActionResult<RolePermission>> GetRolePermissionById(int id)
+        {
+            var rolePermission = await _context.RolePermissions
+                .Include(rp => rp.Permission)
+                .FirstOrDefaultAsync(rp => rp.Id == id);
+            if (rolePermission == null) return NotFound("Role permission not found");
+            return rolePermission;
+        }
+
+        [HttpGet]
+        [Route("api/GetRolePermissionByRoleIdAsync")]
+        public async Task<ActionResult<List<RolePermission>>> GetRolePermissionByRoleIdAsync(int roleId)
         {
             var rolePermissions = await _context.RolePermissions
                 .Include(rp => rp.Permission)

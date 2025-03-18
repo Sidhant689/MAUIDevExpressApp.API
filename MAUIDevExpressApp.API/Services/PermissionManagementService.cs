@@ -33,8 +33,8 @@ namespace MAUIDevExpressApp.API.Services
                 .SelectMany(u => u.UserRoles)
                 .Where(ur => ur.Role.IsActive == true && ur.ExpiresAt == null && ur.ExpiresAt > DateTime.UtcNow)
                 .SelectMany(ur => ur.Role.RolePermissions)
-                .Where(rp => rp.Permission.IsActive && rp.Permission.Module.IsActive &&
-                    rp.Permission.Module.Name == moduleName && rp.Permission.Action == permissionAction).AnyAsync();
+                .Where(rp => rp.Permission.IsActive && rp.Permission.Page.IsActive &&
+                    rp.Permission.Page.Name == moduleName && rp.Permission.Action == permissionAction).AnyAsync();
             var cacheOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(10));
 
@@ -80,7 +80,7 @@ namespace MAUIDevExpressApp.API.Services
                 if (module == null) return false;
 
                 if (await _context.Permissions
-                    .AnyAsync(p => p.ModuleId == module.Id && p.Action == action))
+                    .AnyAsync(p => p.PageId == module.Id && p.Action == action))
                 {
                     return false;
                 }
@@ -88,7 +88,7 @@ namespace MAUIDevExpressApp.API.Services
                 var permission = new Permission
                 {
                     Name = name,
-                    ModuleId = module.Id,
+                    PageId = module.Id,
                     Action = action,
                     CreatedAt = DateTime.UtcNow
                 };
@@ -113,9 +113,9 @@ namespace MAUIDevExpressApp.API.Services
                     .FirstOrDefaultAsync(r => r.Name == roleName && r.IsActive);
 
                 var permission = await _context.Permissions
-                    .Include(p => p.Module)
+                    .Include(p => p.Page)
                     .FirstOrDefaultAsync(p =>
-                        p.Module.Name == moduleName &&
+                        p.Page.Name == moduleName &&
                         p.Action == permissionAction &&
                         p.IsActive);
 
@@ -174,11 +174,11 @@ namespace MAUIDevExpressApp.API.Services
                     .ThenInclude(ur => ur.Role) // Load Role
                         .ThenInclude(r => r.RolePermissions) // Load RolePermissions
                             .ThenInclude(rp => rp.Permission) // Load Permission
-                                .ThenInclude(p => p.Module) // Load Module
+                                .ThenInclude(p => p.Page) // Load Module
                 .SelectMany(u => u.UserRoles)
                 .Where(ur => ur.Role.IsActive == true && (ur.ExpiresAt == null || ur.ExpiresAt > DateTime.UtcNow))
                 .SelectMany(ur => ur.Role.RolePermissions)
-                .Where(rp => rp.Permission.IsActive && rp.Permission.Module.IsActive)
+                .Where(rp => rp.Permission.IsActive && rp.Permission.Page.IsActive)
                 .Select(rp => rp.Permission)
                 .ToListAsync();
 
@@ -194,7 +194,7 @@ namespace MAUIDevExpressApp.API.Services
                     .ThenInclude(ur => ur.Role) // Load Role
                         .ThenInclude(r => r.RolePermissions) // Load RolePermissions
                             .ThenInclude(rp => rp.Permission) // Load Permission
-                                .ThenInclude(p => p.Module) // Load Module
+                                .ThenInclude(p => p.Page) // Load Module
                 .SelectMany(u => u.UserRoles)
                 .Where(ur => ur.Role.IsActive == true && (ur.ExpiresAt == null || ur.ExpiresAt > DateTime.UtcNow))
                 .Select(ur => ur.Role)

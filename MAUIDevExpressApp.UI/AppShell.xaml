@@ -53,6 +53,12 @@
         Route="ModulesPage" />
 
     <ShellContent
+    FlyoutItemIsVisible="False"
+    Title="Modules"
+    ContentTemplate="{DataTemplate views:Page}"
+    Route="Page" />
+
+    <ShellContent
         FlyoutItemIsVisible="False"
         Title="Permissions"
         ContentTemplate="{DataTemplate views:PermissionPage}"
@@ -63,6 +69,11 @@
         Title="Roles"
         ContentTemplate="{DataTemplate views:RolesPage}"
         Route="RolesPage" />
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        Title="Rolepermission"
+        ContentTemplate="{DataTemplate views:RolePermissionPage}"
+        Route="RolePermissionPage"/>
 
     <ShellContent
         FlyoutItemIsVisible="False"

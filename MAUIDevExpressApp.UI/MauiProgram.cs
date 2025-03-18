@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using System.Reflection;
+using Page = MAUIDevExpressApp.UI.Views.Page;
 namespace MAUIDevExpressApp.UI
 {
     public static class MauiProgram
@@ -49,8 +50,10 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddSingleton<IProductService, ProductService>();
             builder.Services.AddSingleton<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddSingleton<IModuleService, ModuleService>();
+            builder.Services.AddSingleton<IPageService, PageService>();
             builder.Services.AddSingleton<IRoleService, RoleService>();
             builder.Services.AddSingleton<IPermissionService, PermissionService>();
+            builder.Services.AddSingleton<IRolePermissionService, RolePermissionService>();
 
             // Register ViewModels
             builder.Services.AddTransient<AppShellViewModel>();
@@ -62,12 +65,14 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductsViewModel>();
             builder.Services.AddTransient<ProductDetailViewModel>();
             builder.Services.AddTransient<ModulesViewModel>();
+            builder.Services.AddTransient<PageViewModel>();
             builder.Services.AddTransient<ModuleDetailViewModel>();
             builder.Services.AddTransient<RolesViewModel>();
             builder.Services.AddTransient<RoleDetailViewModel>();
             builder.Services.AddTransient<MultiFormRolesViewModel>();
             builder.Services.AddTransient<PermissionViewModel>();
             builder.Services.AddTransient<PermissionFormViewModel>();
+            builder.Services.AddTransient<RolePermissionViewModel>();
 
 
             // Register AppShell and App
@@ -84,12 +89,13 @@ namespace MAUIDevExpressApp.UI
             builder.Services.AddTransient<ProductDetailPage>();
             builder.Services.AddTransient<ModulesPage>();
             builder.Services.AddTransient<ModuleDetailPage>();
+            builder.Services.AddTransient<Page>();
             builder.Services.AddTransient<RolesPage>();
             builder.Services.AddTransient<RoleDetailPage>();
-            builder.Services.AddTransient<RolePermissionsPage>();
             builder.Services.AddTransient<MultiFormRolesPage>();
             builder.Services.AddTransient<PermissionPage>();
             builder.Services.AddTransient<PermissionDetailPage>();
+            builder.Services.AddTransient<RolePermissionPage>();
 
             return builder.Build();
         }

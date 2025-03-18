@@ -72,13 +72,13 @@ namespace MAUIDevExpressApp.API.Controllers
                     IsSystem = r.IsSystem,
                     Permissions = r.RolePermissions.Select(rp => new PermissionDTO
                     {
-                        Module = rp.Permission.Module.Name,
+                        Page = rp.Permission.Page.Name,
                         Action = rp.Permission.Action
                     }).ToList()
                 }).ToList(),
                 Permissions = permissions.Select(p => new PermissionDTO
                 {
-                    Module = p.Module.Name,
+                    Page = p.Page.Name,
                     Action = p.Action
                 }).ToList(),
                 Expiration = DateTime.UtcNow.AddMinutes(
@@ -129,13 +129,13 @@ namespace MAUIDevExpressApp.API.Controllers
                     IsSystem = r.IsSystem,
                     Permissions = r.RolePermissions.Select(rp => new PermissionDTO
                     {
-                        Module = rp.Permission.Module.Name,
+                        Page = rp.Permission.Page.Name,
                         Action = rp.Permission.Action
                     }).ToList()
                 }).ToList(),
                 Permissions = permissions.Select(p => new PermissionDTO
                 {
-                    Module = p.Module.Name,
+                    Page = p.Page.Name,
                     Action = p.Action
                 }).ToList(),
                 Expiration = DateTime.UtcNow.AddMinutes(

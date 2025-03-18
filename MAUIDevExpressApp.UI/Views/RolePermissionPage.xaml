@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:treeview="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             x:Class="MAUIDevExpressApp.UI.Views.RolePermissionPage"
+             Title="Role Permission Management">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <!-- Role Selection -->
+        <Label Text="Select Role:" FontSize="18" />
+        <combobox:SfComboBox ItemsSource="{Binding Roles}"
+                             SelectedItem="{Binding SelectedRoleId, Mode=TwoWay}"
+                             DisplayMemberPath="Name"
+                              />
+
+        <!-- TreeView for Modules -> Pages -> Permissions -->
+        <treeview:SfTreeView x:Name="RolePermissionTreeView"
+                             ItemsSource="{Binding Modules}"
+                             ChildPropertyName="Pages"
+                             CheckBoxMode="Recursive">
+
+            
+
+        </treeview:SfTreeView>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Spacing="10">
+            <buttons:SfButton Text="Assign Permissions"
+                      
+                              BackgroundColor="Green" 
+                              TextColor="White"/>
+
+            <buttons:SfButton Text="Remove Selected"
+                           
+                              BackgroundColor="Red" 
+                              TextColor="White"/>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentPage>

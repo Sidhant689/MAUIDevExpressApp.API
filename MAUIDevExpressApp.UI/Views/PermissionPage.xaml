@@ -35,8 +35,8 @@
                 <dg:DataGridTextColumn HeaderText="Name"
                                        MappingName="Name"
                                        Width="150"/>
-                <dg:DataGridTextColumn HeaderText="Module"
-                                       MappingName="ModuleId"
+                <dg:DataGridTextColumn HeaderText="Page"
+                                       MappingName="PageId"
                                        Width="150"/>
                 <dg:DataGridTextColumn HeaderText="Action"
                                        MappingName="Action"

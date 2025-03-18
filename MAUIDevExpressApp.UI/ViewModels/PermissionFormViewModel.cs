@@ -15,19 +15,19 @@ namespace MAUIDevExpressApp.UI.ViewModels
     public partial class PermissionFormViewModel : MultiFormBaseViewModel<PermissionDTO>
     {
         private readonly IPermissionService _permissionService;
-        private readonly IModuleService _moduleService;
+        private readonly IPageService _pageservice;
 
         [ObservableProperty]
-        private ObservableCollection<ModuleDTO> _modules;
+        private ObservableCollection<PageDTO> _pages;
 
         [ObservableProperty]
-        private ModuleDTO _selectedModule;
+        private PageDTO _selectedPage;
 
-        public PermissionFormViewModel(IPermissionService permissionService, IModuleService moduleService, INavigationService navigationService, IDialogService dialogService) : base(navigationService, dialogService)
+        public PermissionFormViewModel(IPermissionService permissionService, IPageService pageService, INavigationService navigationService, IDialogService dialogService) : base(navigationService, dialogService)
         {
             _permissionService = permissionService;
-            _moduleService = moduleService;
-            Modules = new ObservableCollection<ModuleDTO>();
+            _pageservice = pageService;
+            Pages = new ObservableCollection<PageDTO>();
         }
 
         protected override string GetEditTitle(PermissionDTO permission)
@@ -47,20 +47,20 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
         }
 
-        private bool _isModulesLoaded = false;
+        private bool _isPagesLoaded = false;
 
-        public async Task LoadModules()
+        public async Task LoadPages()
         {
-            if (_isModulesLoaded) return;  // Prevent duplicate calls
-            _isModulesLoaded = true;       // Mark as loaded
+            if (_isPagesLoaded) return;  // Prevent duplicate calls
+            _isPagesLoaded = true;       // Mark as loaded
 
             try
             {
-                var modules = await _moduleService.GetAllModulesAsync();
-                Modules.Clear();
-                foreach (var category in modules)
+                var pages = await _pageservice.GetAllPagesAsync();
+                Pages.Clear();
+                foreach (var category in pages)
                 {
-                    Modules.Add(category);
+                    Pages.Add(category);
                 }
             }
             catch (Exception ex)
@@ -72,11 +72,11 @@ namespace MAUIDevExpressApp.UI.ViewModels
 
         protected override async void OpenExistingEntity(PermissionDTO entity)
         {
-            // Load modules first to ensure they're available
-            await LoadModules();
+            // Load Pages first to ensure they're available
+            await LoadPages();
 
-            // Find and set the selected module based on the entity's ModuleId
-            SelectedModule = Modules.FirstOrDefault(m => m.Id == entity.ModuleId);
+            // Find and set the selected Page based on the entity's PageId
+            SelectedPage = Pages.FirstOrDefault(m => m.Id == entity.PageId);
 
             // Create a new session with the passed entity
             FormManager.CreateNewSession(entity, GetEditTitle(entity));
@@ -92,7 +92,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 form.IsBusy = true;
                 form.HasUnsavedChanges = false;
 
-                form.Entity.ModuleId = SelectedModule.Id;
+                form.Entity.PageId = SelectedPage.Id;
 
                 if (form.IsEditing)
                 {

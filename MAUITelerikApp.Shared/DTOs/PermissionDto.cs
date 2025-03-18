@@ -10,23 +10,23 @@ namespace MAUIDevExpressApp.Shared.DTOs
         public string Name { get; set; }
 
         public string Description { get; set; }
-        public int ModuleId { get; set; }
+        public int PageId { get; set; }
         public string Action { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public string Module { get; set; }
+        public string Page { get; set; }
 
         // Navigation properties
-        public ModuleDTO ModuleObj { get; set; }
+        public PageDTO PageObj { get; set; }
 
         // For permission management UI
         public bool IsSelected { get; set; }
 
         // Display properties
         public string StatusDisplay => IsActive ? "Active" : "Inactive";
-        public string FullName => $"{ModuleObj?.Name} - {Name}";
+        public string FullName => $"{PageObj?.Name} - {Name}";
         public string ActionDisplay => $"{Action} ({Description})";
     }
 

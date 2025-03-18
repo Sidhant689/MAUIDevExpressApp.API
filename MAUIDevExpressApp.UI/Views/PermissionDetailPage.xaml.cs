@@ -15,10 +15,10 @@ public partial class PermissionDetailPage : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        _viewModel.LoadModules();
+        _viewModel.LoadPages();
     }
 
-    private void PermisaionName_textChanged(object sender, TextChangedEventArgs e)
+    private void PermissionName_textChanged(object sender, TextChangedEventArgs e)
     {
 		if(BindingContext is PermissionFormViewModel viewModel && viewModel.FormManager.CurrentForm != null)
 		{

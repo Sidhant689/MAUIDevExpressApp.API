@@ -37,7 +37,7 @@ namespace MAUIDevExpressApp.UI.Services
         public bool HasPermission(string module, string action)
         {
             return CurrentUserPermissions.Any(p =>
-                p.Module == module && p.Action == action);
+                p.Page == module && p.Action == action);
         }
 
         public bool HasRole(string[] roleNames)

@@ -73,7 +73,7 @@ namespace MAUIDevExpressApp.UI.Services.Reporting
                     PdfGridRow row = grid.Rows.Add();
                     row.Cells[0].Value = permission.Id.ToString();
                     row.Cells[1].Value = permission.Name;
-                    row.Cells[2].Value = permission.Module;
+                    row.Cells[2].Value = permission.Page;
                     row.Cells[3].Value = permission.Action;
                     row.Cells[4].Value = permission.Description;
                     row.Cells[5].Value = permission.StatusDisplay;

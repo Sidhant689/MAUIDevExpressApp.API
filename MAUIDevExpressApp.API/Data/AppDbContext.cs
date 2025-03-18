@@ -21,5 +21,6 @@ namespace MAUIDevExpressApp.API.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<Page> Pages { get; set; }
     }
 }

@@ -14,13 +14,13 @@ namespace MAUIDevExpressApp.Shared.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [ForeignKey("Module")]
-        public int ModuleId { get; set; }
+        [ForeignKey("Page")]
+        public int PageId { get; set; }
         public string Action { get; set; } // The actual permission action (e.g., "Create", "Read", etc.)
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual Page Page { get; set; }
         public ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

@@ -55,19 +55,5 @@ namespace MAUIDevExpressApp.UI.Services
         {
             await _apiService.DeleteAsync($"DeleteRole?Id={id}");
         }
-
-        public async Task<bool> AddPermissionsToRoleAsync(int roleId, List<int> permissionIds)
-        {
-            var request = new { RoleId = roleId, PermissionIds = permissionIds };
-            var response = await _apiService.PostAsync($"AddPermissionsToRole", request);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> RemovePermissionsFromRoleAsync(int roleId, List<int> permissionIds)
-        {
-            var request = new { RoleId = roleId, PermissionIds = permissionIds };
-            var response = await _apiService.PostAsync($"RemovePermissionsFromRole", request);
-            return response.IsSuccessStatusCode;
-        }
     }
 }

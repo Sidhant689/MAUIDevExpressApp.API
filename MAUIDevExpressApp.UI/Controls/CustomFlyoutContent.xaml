@@ -16,7 +16,7 @@
             <Grid Padding="15" BackgroundColor="Transparent" 
               RowDefinitions="Auto"
               ColumnDefinitions="Auto,*,Auto">
-                <Image Source="bxs_home.png" 
+                <Image Source="dashboard.png" 
                    HeightRequest="24" 
                    WidthRequest="24" 
                    Grid.Column="0" />
@@ -35,7 +35,7 @@
             <Grid Padding="15" BackgroundColor="Transparent" 
               RowDefinitions="Auto"
               ColumnDefinitions="Auto,*,Auto">
-                <Image Source="bxs_user_check.png" 
+                <Image Source="user_management.png" 
                    HeightRequest="24" 
                    WidthRequest="24" 
                    Grid.Column="0" />
@@ -59,8 +59,12 @@
                              Margin="40,0,0,0" 
                              BackgroundColor="#f0f0f0"
                              Spacing="0">
-                <Grid Padding="15" BackgroundColor="Transparent">
-                    <Label Text="Modules" 
+                <Grid ColumnDefinitions="Auto,Auto" Padding="15" BackgroundColor="Transparent" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="modules.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" Text="Modules" 
                        FontSize="14" 
                        VerticalOptions="Center" />
                     <Grid.GestureRecognizers>
@@ -69,8 +73,26 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid Padding="15" BackgroundColor="Transparent">
-                    <Label Text="Permissions" 
+                <Grid ColumnDefinitions="Auto, Auto" Padding="15" BackgroundColor="Transparent" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="pages.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" Text="Pages"
+                           FontSize="14" 
+                          VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                                          CommandParameter="///Page" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,Auto" Padding="15" BackgroundColor="Transparent" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="permission.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" Text="Permissions" 
                        FontSize="14" 
                        VerticalOptions="Center" />
                     <Grid.GestureRecognizers>
@@ -79,13 +101,31 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid Padding="15" BackgroundColor="Transparent">
-                    <Label Text="Roles" 
+                <Grid ColumnDefinitions="Auto,Auto" Padding="15" BackgroundColor="Transparent" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="user_role.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" Text="Roles" 
                        FontSize="14" 
                        VerticalOptions="Center" />
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" 
                                           CommandParameter="///RolesPage" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,Auto" Padding="15" BackgroundColor="Transparent" ColumnSpacing="10">
+                    <Image Grid.Column="0" 
+                        Source="role_permission.png" 
+                        HeightRequest="14" 
+                        WidthRequest="14" />
+                    <Label Grid.Column="1" Text="Roles Permission" 
+                        FontSize="14" 
+                        VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" 
+                          CommandParameter="///RolePermissionPage" />
                     </Grid.GestureRecognizers>
                 </Grid>
             </VerticalStackLayout>

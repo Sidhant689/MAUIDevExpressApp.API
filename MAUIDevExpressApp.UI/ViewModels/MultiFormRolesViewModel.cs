@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using MAUIDevExpressApp.Shared.DTOs;
 using MAUIDevExpressApp.UI.Interface_Services;
 using MAUIDevExpressApp.UI.ViewModels.GenericViewModels;
-using MAUIDevExpressApp.UI.ViewModels.Nodes;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -95,19 +94,5 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 form.IsBusy = false;
             }
         }
-
-        private void UpdateModuleSelection(ModuleNodeViewModel module)
-        {
-            if (module == null || !module.IsModule) return;
-
-            bool allSelected = module.Permissions.Count > 0 &&
-                               module.Permissions.All(p => p.IsSelected);
-            bool anySelected = module.Permissions.Any(p => p.IsSelected);
-
-            // Update module selection without triggering events
-            module.IsSelected = allSelected;
-            module.IsIndeterminate = anySelected && !allSelected;
-        }
-
     }
 }
