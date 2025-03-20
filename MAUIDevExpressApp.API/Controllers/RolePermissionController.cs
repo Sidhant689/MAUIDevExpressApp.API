@@ -60,7 +60,7 @@ namespace MAUIDevExpressApp.API.Controllers
 
         [HttpPost]
         [Route("api/AssignRolePermissions")]
-        public async Task<IActionResult> AssignRolePermissions([FromBody] List<int> permissionIds, [FromQuery] int roleId)
+        public async Task<IActionResult> AssignRolePermissions( [FromQuery] int roleId, [FromBody] List<int> permissionIds)
         {
             try
             {
@@ -100,6 +100,37 @@ namespace MAUIDevExpressApp.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/RemoveRolePermissions")]
+        public async Task<IActionResult> RemoveRolePermissions([FromQuery] int roleId, [FromBody] List<int> permissionIds)
+        {
+            try
+            {
+                var role = await _context.Roles.FindAsync(roleId);
+                if (role == null)
+                {
+                    return NotFound("Role not found.");
+                }
+
+                var rolePermissions = await _context.RolePermissions
+                    .Where(rp => rp.RoleId == roleId && permissionIds.Contains(rp.PermissionId))
+                    .ToListAsync();
+
+                if (!rolePermissions.Any())
+                {
+                    return NotFound("No matching permissions found for removal.");
+                }
+
+                _context.RolePermissions.RemoveRange(rolePermissions);
+                await _context.SaveChangesAsync();
+
+                return Ok("Permissions removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
     }
 }

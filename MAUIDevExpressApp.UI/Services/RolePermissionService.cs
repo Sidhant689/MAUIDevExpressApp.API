@@ -52,10 +52,24 @@ namespace MAUIDevExpressApp.UI.Services
         /// <summary>
         /// Remove a permission from a role
         /// </summary>
-        public async Task<bool> RemovePermissionFromRoleAsync(int roleId, int permissionId)
+        public async Task<bool> RemovePermissionFromRoleAsync(int roleId, List<int> permissionIds)
         {
-            var response = await _apiService.DeleteAsync($"RemovePermissionFromRole/{roleId}/{permissionId}");
-            return response.IsSuccessStatusCode;
+            // use try catch block to handle exceptions
+            try
+            {
+                var requestedData = new
+                {
+                    RoleId = roleId,
+                    PermissionIds = permissionIds
+                };
+                var response = await _apiService.PostAsync("RemoveRolePermissions", requestedData);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // log the exception
+                return false;
+            }
         }
     }
 }

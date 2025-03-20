@@ -9,5 +9,6 @@ namespace MAUIDevExpressApp.UI.Interface_Services
         Task CreatePageAsync(PageDTO Page);
         Task UpdatePageAsync(PageDTO Page);
         Task DeletePageAsync(int id);
+        Task<List<PageDTO>> GetPagesByModuleIdAsync(int id);
     }
 }

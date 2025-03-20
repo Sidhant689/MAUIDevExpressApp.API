@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MAUIDevExpressApp.UI.Views.PermissionDetailPage"
              xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              Title="PermissionDetailPage">
     <Grid RowDefinitions="Auto,*" Padding="10">
         <HorizontalStackLayout Spacing="10">
@@ -66,24 +69,48 @@
                 <ContentView x:Name="FormContainer">
                     <ScrollView>
                         <VerticalStackLayout Padding="20" Spacing="20">
-                            <Label Text="Permission Name" FontAttributes="Bold"/>
-                            <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="PermissionName_textChanged" />
+                            <core:SfTextInputLayout
+                                Hint="Permission Name"
+                                ContainerType="Outlined"
+                                OutlineCornerRadius="10"
+                                HelperText="Enter the Permission Name">
+                                <Entry Text="{Binding FormManager.CurrentForm.Entity.Name, Mode=TwoWay}" TextChanged="PermissionName_textChanged" />
+                            </core:SfTextInputLayout>
 
-                            <Label Text="Page" FontAttributes="Bold"/>
-                            <Picker ItemsSource="{Binding Pages}"
-                                SelectedItem="{Binding SelectedPage}"
-                                ItemDisplayBinding="{Binding Name}"/>   
+                            <core:SfTextInputLayout 
+                                Hint="Page" 
+                                Grid.Row="1"
+                                ContainerType="Outlined"
+                                OutlineCornerRadius="10"
+                                HelperText="Select Suitable Page">
+                                <combobox:SfComboBox x:Name="ddlModule" 
+                                    ItemsSource="{Binding Pages}"
+                                    DisplayMemberPath="Name"
+                                    SelectedItem="{Binding SelectedPage}"
+                                    HeightRequest="40"/>
+                            </core:SfTextInputLayout>
 
-                            <Label Text="Action" FontAttributes="Bold"/>
-                            <Entry Text="{Binding FormManager.CurrentForm.Entity.Action, Mode=TwoWay}" />
+                            <core:SfTextInputLayout
+                                Hint="Action Name"
+                                ContainerType="Outlined"
+                                OutlineCornerRadius="10"
+                                HelperText="Enter the Action Name">
+                                <Entry Text="{Binding FormManager.CurrentForm.Entity.Action, Mode=TwoWay}" />
+                            </core:SfTextInputLayout>
 
-                            <Label Text="Permission Description" FontAttributes="Bold"/>
-                            <Editor Text="{Binding FormManager.CurrentForm.Entity.Description, Mode=TwoWay}" />
+                            <core:SfTextInputLayout
+                                Hint="Permission Description"
+                                ContainerType="Outlined"
+                                OutlineCornerRadius="10"
+                                HelperText="Enter the Permission Description">
+                                <Editor Text="{Binding FormManager.CurrentForm.Entity.Description, Mode=TwoWay}" />
+                            </core:SfTextInputLayout>
 
                             <Label Text="Is Active" FontAttributes="Bold"/>
-                            <CheckBox IsChecked="{Binding FormManager.CurrentForm.Entity.IsActive, Mode=TwoWay}" />
+                            <buttons:SfCheckBox 
+                                IsChecked="{Binding FormManager.CurrentForm.Entity.IsActive, Mode=TwoWay}" />
 
-                            <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand">
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                                 <Button Text="Save"
                                     Command="{Binding SaveFormCommand}"
                                     CommandParameter="{Binding FormManager.CurrentForm.Id}"

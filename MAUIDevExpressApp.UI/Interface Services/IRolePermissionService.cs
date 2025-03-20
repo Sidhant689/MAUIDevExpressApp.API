@@ -28,6 +28,6 @@ namespace MAUIDevExpressApp.UI.Interface_Services
         /// <summary>
         /// Remove a permission from a role
         /// </summary>
-        Task<bool> RemovePermissionFromRoleAsync(int roleId, int permissionId);
+        Task<bool> RemovePermissionFromRoleAsync(int roleId, List<int> permissionId);
     }
 }

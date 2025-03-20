@@ -19,6 +19,8 @@
             <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter"/>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
 
+            <converters:TypeNameConverter x:Key="TypeNameConverter"/>
+
             <!--App Colors-->
                 
             <Color x:Key="PrimaryColor">#4C2C84</Color>

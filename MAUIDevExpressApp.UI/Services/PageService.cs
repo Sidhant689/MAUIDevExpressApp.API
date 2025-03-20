@@ -17,6 +17,11 @@ namespace MAUIDevExpressApp.UI.Services
             var data = await _apiService.GetAsync<List<PageDTO>>("GetAllPages");
             return data;
         }
+        public async Task<List<PageDTO>> GetPagesByModuleIdAsync(int moduleId)
+        {
+            var data = await _apiService.GetAsync<List<PageDTO>>($"GetPagesByModuleId?moduleId={moduleId}");
+            return data;
+        }
 
         public async Task<PageDTO> GetPageByIdAsync(int id)
         {

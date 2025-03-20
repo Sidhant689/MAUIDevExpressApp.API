@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MAUIDevExpressApp.UI.Views.PermissionPage"
              xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:dg="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
              Title="PermissionPage">
     <VerticalStackLayout HorizontalOptions="Center">
@@ -22,7 +24,7 @@
                        ItemsSource="{Binding PermissionsList}"
                        AutoGenerateColumnsMode="None"
                        SelectionMode="Multiple"
-                       VerticalOptions="CenterAndExpand"
+                       VerticalOptions="Center"
                        HorizontalOptions="Center"
                        AllowResizingColumns="True"
                        AllowEditing="True"

@@ -24,6 +24,21 @@ namespace MAUIDevExpressApp.UI.Services
             return data;
         }
 
+        public async Task<List<PermissionDTO>> GetPermissionsByPageIdAsync(int id)
+        {
+            // use trycatch block to handle exceptions
+            try
+            {
+                var data = await _apiService.GetAsync<List<PermissionDTO>>($"GetPermissionsByPageId?pageId={id}");
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
         public async Task<List<PermissionDTO>> GetPermissionsByModuleAsync(int moduleId)
         {
             var permissions = await _apiService.GetAsync<List<PermissionDTO>>($"GetPermissionsByModule?moduleId={moduleId}");

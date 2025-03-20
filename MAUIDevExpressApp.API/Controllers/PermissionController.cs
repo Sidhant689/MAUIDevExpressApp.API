@@ -26,6 +26,22 @@ namespace MAUIDevExpressApp.API.Controllers
         }
 
         [HttpGet]
+        [Route("api/GetPermissionsByPageId")]
+        public async Task<List<Permission>> GetPermissionsByPageId(int pageId)
+        {
+            // use trycatch block to handle exceptions
+            try
+            {
+                var permissions = await _context.Permissions.Where(p => p.PageId == pageId).ToListAsync();
+                return permissions;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("api/GetPermissionById")]
         public async Task<ActionResult<Permission>> GetPermissionById(int id)
         {
@@ -34,5 +50,63 @@ namespace MAUIDevExpressApp.API.Controllers
             return Permission;
         }
 
+        [HttpPost]
+        [Route("api/AddPermission")]
+        public async Task<ActionResult<Permission>> AddPermission([FromBody] Permission Permission)
+        {
+            try
+            {
+                Permission.CreatedAt = DateTime.UtcNow;
+                _context.Permissions.Add(Permission);
+                await _context.SaveChangesAsync();
+                return Permission;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        [Route("api/UpdatePermission")]
+        public async Task<ActionResult<Permission>> UpdatePermission([FromBody] Permission Permission)
+        {
+            try
+            {
+                var existingPermission = await _context.Permissions.FindAsync(Permission.Id);
+                if (existingPermission == null) return NotFound("Permission not found");
+
+                existingPermission.Name = Permission.Name;
+                existingPermission.Description = Permission.Description;
+                existingPermission.IsActive = Permission.IsActive;
+                existingPermission.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+                return Ok(existingPermission);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/DeletePermission")]
+        public async Task<IActionResult> DeletePermission(int id)
+        {
+            try
+            {
+                var Permission = await _context.Permissions.FindAsync(id);
+                if (Permission == null) return NotFound("Permission not found");
+
+                _context.Permissions.Remove(Permission);
+                await _context.SaveChangesAsync();
+                return Ok("Permission deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

@@ -2,44 +2,181 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:treeview="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+             xmlns:treeviewengine="clr-namespace:Syncfusion.TreeView.Engine;assembly=Syncfusion.Maui.TreeView"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:vm="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
+             xmlns:dto="clr-namespace:MAUIDevExpressApp.Shared.DTOs;assembly=MAUIDevExpressApp.Shared"
              x:Class="MAUIDevExpressApp.UI.Views.RolePermissionPage"
+             x:Name="RolePermissionView"
              Title="Role Permission Management">
-
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
         <!-- Role Selection -->
-        <Label Text="Select Role:" FontSize="18" />
-        <combobox:SfComboBox ItemsSource="{Binding Roles}"
-                             SelectedItem="{Binding SelectedRoleId, Mode=TwoWay}"
-                             DisplayMemberPath="Name"
-                              />
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Select Role:" FontSize="18" />
+            <combobox:SfComboBox ItemsSource="{Binding Roles}"
+                                 SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
+                                 DisplayMemberPath="Name"
+                                 Placeholder="Select Role"/>
+        </VerticalStackLayout>
 
-        <!-- TreeView for Modules -> Pages -> Permissions -->
-        <treeview:SfTreeView x:Name="RolePermissionTreeView"
-                             ItemsSource="{Binding Modules}"
-                             ChildPropertyName="Pages"
-                             CheckBoxMode="Recursive">
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            
+            <!-- Left Side: TreeView for Modules and Pages with checkboxes -->
+            <Border Grid.Column="0" StrokeThickness="1" Stroke="{StaticResource Gray300}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-        </treeview:SfTreeView>
+                    <Label Grid.Row="0" Text="Modules and Pages" FontSize="16" FontAttributes="Bold" Padding="10" />
+
+                    <treeview:SfTreeView Grid.Row="1" x:Name="ModulePageTreeView"
+                                         ItemsSource="{Binding Modules}"
+                                         AutoExpandMode="AllNodesExpanded"
+                                         SelectionMode="Single"
+                                         SelectedItem="{Binding SelectedTreeItem, Mode=TwoWay}"
+                                         CheckBoxMode="Recursive"
+                                         CheckedItems="{Binding CheckedTreeItems, Mode=TwoWay}"
+                                         ItemTemplateContextType="Node">
+
+                        <treeview:SfTreeView.HierarchyPropertyDescriptors>
+                            <treeviewengine:HierarchyPropertyDescriptor TargetType="{x:Type dto:ModuleDTO}" ChildPropertyName="Pages"/>
+                        </treeview:SfTreeView.HierarchyPropertyDescriptors>
+
+                        <treeview:SfTreeView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Checkbox -->
+                                    <buttons:SfCheckBox Grid.Column="0"
+                                                      IsThreeState="True"
+                                                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      VerticalOptions="Center"
+                                                      StateChanged="TreeCheckBox_StateChanged"
+                                                      HorizontalOptions="Center"/>
+
+                                    <!-- Icon based on item type -->
+                                    <Image Grid.Column="1" 
+                                           WidthRequest="24" 
+                                           HeightRequest="24"
+                                           Margin="5,0">
+                                        <Image.Triggers>
+                                            <!-- Module icon -->
+                                            <DataTrigger TargetType="Image" 
+                                                         Binding="{Binding Content, Converter={StaticResource TypeNameConverter}}" 
+                                                         Value="ModuleDTO">
+                                                <Setter Property="Source" Value="modules.png" />
+                                            </DataTrigger>
+                                            <!-- Page icon -->
+                                            <DataTrigger TargetType="Image" 
+                                                         Binding="{Binding Content, Converter={StaticResource TypeNameConverter}}" 
+                                                         Value="PageDTO">
+                                                <Setter Property="Source" Value="pages.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+
+                                    <!-- Text with different styles based on level -->
+                                    <Label Grid.Column="2" 
+                                           Text="{Binding Content.Name}" 
+                                           VerticalOptions="Center">
+                                        <Label.Triggers>
+                                            <!-- Module style -->
+                                            <DataTrigger TargetType="Label" 
+                                                         Binding="{Binding Content, Converter={StaticResource TypeNameConverter}}" 
+                                                         Value="ModuleDTO">
+                                                <Setter Property="FontAttributes" Value="Bold" />
+                                                <Setter Property="FontSize" Value="16" />
+                                            </DataTrigger>
+                                            <!-- Page style -->
+                                            <DataTrigger TargetType="Label" 
+                                                         Binding="{Binding Content, Converter={StaticResource TypeNameConverter}}" 
+                                                         Value="PageDTO">
+                                                <Setter Property="FontSize" Value="14" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Grid>
+                            </DataTemplate>
+                        </treeview:SfTreeView.ItemTemplate>
+                    </treeview:SfTreeView>
+                </Grid>
+            </Border>
+
+            <!-- Separator -->
+            <BoxView Grid.Column="1" Width="1" Margin="10,0" BackgroundColor="{StaticResource Gray300}" />
+
+            <!-- Right Side: Permissions for selected module/page -->
+            <Border Grid.Column="2" StrokeThickness="1" Stroke="{StaticResource Gray300}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="{Binding SelectedItemTitle}" FontSize="16" FontAttributes="Bold" Padding="10" />
+
+                    <CollectionView Grid.Row="1" 
+                                   ItemsSource="{Binding AvailablePermissions}"
+                                   SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate >
+                                <Grid Padding="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <buttons:SfCheckBox Grid.Column="0"
+                                                       IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Center"
+                                                       />
+
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Name}" 
+                                           VerticalOptions="Center" 
+                                           Margin="10,0,0,0" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+        </Grid>
 
         <!-- Buttons -->
-        <HorizontalStackLayout Spacing="10">
+        <HorizontalStackLayout Grid.Row="2" Spacing="10" HorizontalOptions="Center" Margin="0,15,0,0">
             <buttons:SfButton Text="Assign Permissions"
-                      
-                              BackgroundColor="Green" 
-                              TextColor="White"/>
+                             Command="{Binding AssignPermissionsCommand}"
+                             BackgroundColor="Green" 
+                             TextColor="White"
+                             Padding="10,5"/>
 
             <buttons:SfButton Text="Remove Selected"
-                           
-                              BackgroundColor="Red" 
-                              TextColor="White"/>
+                             Command="{Binding RemovePermissionsCommand}"
+                             BackgroundColor="Red" 
+                             TextColor="White"
+                             Padding="10,5"/>
         </HorizontalStackLayout>
-
-    </VerticalStackLayout>
-
+    </Grid>
 </ContentPage>

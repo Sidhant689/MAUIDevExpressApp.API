@@ -43,6 +43,22 @@ namespace MAUIDevExpressApp.API.Controllers
             return Page;
         }
 
+        [HttpGet]
+        [Route("api/GetPagesByModuleId")]
+        public async Task<List<Page>> GetPagesByModuleId(int moduleId)
+        {
+            // use try catch block to handle exceptions
+            try
+            {
+                var Pages = await _context.Pages.Where(p => p.ModuleId == moduleId).ToListAsync();
+                return Pages;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("api/AddPage")]
         public async Task<IActionResult> AddPage([FromBody] Page Page)

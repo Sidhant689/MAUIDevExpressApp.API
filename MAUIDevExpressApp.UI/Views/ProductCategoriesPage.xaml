@@ -2,6 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dto="clr-namespace:MAUIDevExpressApp.Shared.DTOs;assembly=MAUIDevExpressApp.Shared"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="MAUIDevExpressApp.UI.Views.ProductCategoriesPage"
              xmlns:viewmodels="clr-namespace:MAUIDevExpressApp.UI.ViewModels"
              Title="{Binding Title}">
@@ -23,16 +26,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="dto:ProductCategoryDTO">
                         <Frame Margin="0,5" Padding="10">
-                            <Grid RowSpacing="10" ColumnSpacing="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid RowSpacing="10" ColumnSpacing="10"
+                                  RowDefinitions="Auto,Auto,Auto"
+                                  ColumnDefinitions="Auto,*">
 
                                 <!-- Category Image -->
                                 <Image Grid.RowSpan="2"
