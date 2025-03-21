@@ -29,5 +29,4 @@ namespace MAUIDevExpressApp.Shared.DTOs
         public string FullName => $"{PageObj?.Name} - {Name}";
         public string ActionDisplay => $"{Action} ({Description})";
     }
-
 }

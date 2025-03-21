@@ -64,6 +64,8 @@ namespace MAUIDevExpressApp.UI.ViewModels
             await LoadRolesAsync();
         }
 
+        #region Load Methods
+
         [RelayCommand]
         private async Task LoadRolesAsync()
         {
@@ -86,6 +88,23 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
             Modules = new ObservableCollection<ModuleDTO>(moduleList);
         }
+
+        private async Task LoadRolePermissionsAsync()
+        {
+            if (SelectedRole == null)
+                return;
+
+            SelectedPermissions.Clear();
+            var rolePermissions = await _rolePermissionService.GetRolePermissionsByRoleIdAsync(SelectedRole.Id);
+            foreach (var permission in rolePermissions)
+            {
+                SelectedPermissions.Add(permission.Permission);
+            }
+        }
+
+        #endregion
+
+        #region Permission Management Methods
 
         [RelayCommand]
         private async Task AssignPermissionsAsync()
@@ -217,6 +236,10 @@ namespace MAUIDevExpressApp.UI.ViewModels
             }
         }
 
+        #endregion
+
+        #region Module and Page Permission Methods
+
         public async Task LoadModulePermissionsAsync(ModuleDTO module)
         {
             await UpdatePermissionsForContainer(module, true);
@@ -235,19 +258,6 @@ namespace MAUIDevExpressApp.UI.ViewModels
         public async Task RemovePagePermissions(PageDTO page)
         {
             await UpdatePermissionsForContainer(page, false);
-        }
-
-        private async Task LoadRolePermissionsAsync()
-        {
-            if (SelectedRole == null)
-                return;
-
-            SelectedPermissions.Clear();
-            var rolePermissions = await _rolePermissionService.GetRolePermissionsByRoleIdAsync(SelectedRole.Id);
-            foreach (var permission in rolePermissions)
-            {
-                SelectedPermissions.Add(permission.Permission);
-            }
         }
 
         public async Task UpdatePermissionsForContainer(object container, bool isChecked)
@@ -297,6 +307,11 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 // Store in dictionary
                 PermissionsByContainer[containerId] = permissionsWithSelection;
 
+                foreach (var permission in permissionsWithSelection)
+                {
+                    permission.IsSelected = true;
+                }
+
                 // Update available permissions
                 UpdateAvailablePermissionsDisplay();
             }
@@ -312,6 +327,10 @@ namespace MAUIDevExpressApp.UI.ViewModels
                 UpdateAvailablePermissionsDisplay();
             }
         }
+
+        #endregion
+
+        #region Helper Methods
 
         // Update the display based on the current state
         private void UpdateAvailablePermissionsDisplay()
@@ -334,25 +353,7 @@ namespace MAUIDevExpressApp.UI.ViewModels
 
             System.Diagnostics.Debug.WriteLine($"Updated AvailablePermissions count = {AvailablePermissions.Count}");
         }
-    }
 
-    public class PermissionWithSelectionDTO : PermissionDTO
-    {
-        private bool _isSelected;
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set => _isSelected = value;
-        }
-
-        public PermissionWithSelectionDTO(PermissionDTO permission, bool isSelected)
-        {
-            Id = permission.Id;
-            Name = permission.Name;
-            Description = permission.Description;
-            PageId = permission.PageId;
-            IsSelected = isSelected;
-        }
+        #endregion
     }
 }

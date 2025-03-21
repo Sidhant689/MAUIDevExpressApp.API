@@ -140,17 +140,13 @@
                                    SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate >
-                                <Grid Padding="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                                <Grid Padding="8"
+                                      ColumnDefinitions="Auto,*">
 
                                     <buttons:SfCheckBox Grid.Column="0"
                                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                                        VerticalOptions="Center"
-                                                       HorizontalOptions="Center"
-                                                       />
+                                                       HorizontalOptions="Center"/>
 
                                     <Label Grid.Column="1" 
                                            Text="{Binding Name}" 
